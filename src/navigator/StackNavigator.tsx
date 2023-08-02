@@ -1,10 +1,11 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import {AuditoriaScreen} from '../screens/AuditoriaScreen';
+import { AuditoriaScreen } from '../screens/AuditoriaScreen';
 import { BienvenidaScreen } from '../screens/BienvenidaScreen';
 import { HistorialScreen } from '../screens/HistorialScreen';
 import { AuditoriaProcess } from '../screens/AuditoriaProcess';
 import LoginScreen from '../screens/LoginScreen';
+import { beige } from '../components/colores';
 
 export type RootStackParams = {
   LoginScreen: undefined,
@@ -22,7 +23,7 @@ export const StackNavigator = () => {
       screenOptions={{
         headerShown: false,
         cardStyle: {
-          backgroundColor: '#EFEFEF',
+          backgroundColor: beige,
         }
       }} >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />

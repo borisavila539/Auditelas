@@ -6,5 +6,6 @@ const black = '#1B262C'
 const menta = '#9BE8D8'
 const purpura = '#4324aa'
 const navyclaro = '#78C1F3'
+const beige = '#FFF8E1'
 
-export { orange, navy, blue, grey, black, menta, purpura, navyclaro }
+export { orange, navy, blue, grey, black, menta, purpura, navyclaro, beige }

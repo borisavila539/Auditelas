@@ -74,14 +74,14 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
 
     return (
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <TouchableOpacity style={{flex:1, width:'100%', alignItems:'center'}} onPress={()=>onPress(item)}>
+        <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }} onPress={() => onPress(item)}>
           <View style={{
             width: '95%', borderWidth: 1, paddingHorizontal: 10, paddingVertical: 10, marginVertical: 2,
             borderColor: 'black', borderRadius: 5, backgroundColor: 'white'
           }}>
             <Text style={styles.textRender}>Id de Pieza: {item.rollId}</Text>
             <Text style={styles.textRender}>Numero de rollo: {item.apVendRoll}</Text>
-            <Text style={styles.textRender}>Nombre: {item.nameAlias}</Text>
+            <Text style={styles.textRender}>Tela: {item.nameAlias}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -95,12 +95,15 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
+
       <View style={{ width: '80%', maxWidth: 500, marginTop: 10 }}>
-        <Text style={styles.textRender}>Numero de rollo</Text>
+
+        <Text style={styles.textRender}>Id de Pieza</Text>
         <TextInput style={styles.textInputs} value={NumeroRollo}
           onChangeText={(value) => setNumeroRollo(value)}
         ></TextInput>
-        <Text style={styles.textRender}>Id de Pieza</Text>
+
+        <Text style={styles.textRender}>Numero de rollo</Text>
         <TextInput style={styles.textInputs} value={IdPieza}
           onChangeText={(value) => setIdPieza(value)}
         ></TextInput>
@@ -111,8 +114,8 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
           onPress={() => reqRollos()}
           hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
         >
-          <View style={styles.button}><Text style={styles.text}>Buscar</Text>
-          </View>
+          <View style={styles.button}><Text style={styles.text}>Buscar</Text></View>
+
         </TouchableOpacity>
       </View>
 

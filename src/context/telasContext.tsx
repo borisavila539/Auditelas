@@ -2,30 +2,33 @@ import React, { createContext, useReducer } from "react";
 import { TelasReducer } from "./telasReducer";
 
 //Incializar variables a utilizar
-export interface TelasState{
+export interface TelasState {
     apVendRoll: string,
     rollId: string,
-    usuarioId:number,
+    usuarioId: number,
     username: string,
-    nameAlias: string
+    nameAlias: string,
+    IdRollo: number,
 }
 
 //Colocar valor por default
-export const TelasInitialState : TelasState = {
+export const TelasInitialState: TelasState = {
     apVendRoll: '1',
     rollId: '1',
-    usuarioId : 0,
+    usuarioId: 0,
     username: '',
-    nameAlias: '1'
+    nameAlias: '1',
+    IdRollo: 1,
 }
 
-export interface TelasContextProps{
+export interface TelasContextProps {
     telasState: TelasState,
     changeUserid: (userid: number) => void;
     changeUsername: (username: string) => void;
     changeRolloId: (rollId: string) => void;
     changeApVendRoll: (apVendRoll: string) => void;
-    changeNameAlias:(nameAlias: string) => void;
+    changeNameAlias: (nameAlias: string) => void;
+    changeIdRollo: (IdRollo: number) => void;
 }
 
 export const TelasContext = createContext({} as TelasContextProps)
@@ -48,6 +51,9 @@ export const TelasProvider = ({ children }: any) => {
     const changeNameAlias = (nameAlias: string) => {
         dispatch({ type: 'changeNameAlias', payload: nameAlias })
     }
+    const changeIdRollo = (IdRollo: number) => {
+        dispatch({ type: 'changeIdRollo', payload: IdRollo })
+    }
     return (
         <TelasContext.Provider value={{
             telasState,
@@ -55,7 +61,8 @@ export const TelasProvider = ({ children }: any) => {
             changeUsername,
             changeRolloId,
             changeApVendRoll,
-            changeNameAlias
+            changeNameAlias,
+            changeIdRollo,
         }}>
             {children}
         </TelasContext.Provider>

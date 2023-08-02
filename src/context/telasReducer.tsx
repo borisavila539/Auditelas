@@ -6,6 +6,7 @@ type TelasAction =
     | { type: 'changeRolloId', payload: string }
     | { type: 'changeApVendRoll', payload: string }
     | { type: 'changeNameAlias', payload: string }
+    | { type: 'changeIdRollo', payload: number }
 
 export const TelasReducer = (state: TelasState, action: TelasAction): TelasState => {
 
@@ -20,6 +21,8 @@ export const TelasReducer = (state: TelasState, action: TelasAction): TelasState
             return { ...state, apVendRoll: action.payload }
         case "changeNameAlias":
             return { ...state, nameAlias: action.payload }
+        case "changeIdRollo":
+            return { ...state, IdRollo: action.payload }
         default:
             break;
     }

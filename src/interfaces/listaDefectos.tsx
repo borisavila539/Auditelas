@@ -1,7 +1,7 @@
 
 export interface listaDefectosInterface{
-    Id: number,
-    NombreDefecto: string,
+    id: number,
+    descripcion: string,
     Nivel_1: number,
     Nivel_2: number,
     Nivel_3: number,

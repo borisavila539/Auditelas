@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { black, blue, navy, } from '../components/colores';
+import { beige, black, blue,  navy,  purpura, } from '../components/colores';
 import { FontFamily, TextButtons, TextoPantallas } from '../components/Constant';
 
 export const styles = StyleSheet.create({
@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        backgroundColor: navy,
+        backgroundColor: beige,
         justifyContent: 'center',
         paddingBottom: 10,
     },
@@ -72,8 +72,8 @@ export const styles = StyleSheet.create({
         width: '96%',
         paddingHorizontal: 5,
         alignContent: 'center',
-        paddingVertical: 5,
-        marginVertical: 2,
+        paddingVertical: 1,
+        marginVertical: 1,
     },
     botonSumaResta: {
         backgroundColor: blue,
@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
         fontFamily: FontFamily
     },
     input: {
-        padding: 5,
+        //padding: 2,
         marginLeft: 10,
         fontSize: TextButtons,
         fontFamily: 'sans-serif',
@@ -105,6 +105,7 @@ export const styles = StyleSheet.create({
     viewsAuditoria: {
         width: '33%',
         borderWidth: 1,
+        height: 37,
         margin: 2,
         borderRadius: 5
     }

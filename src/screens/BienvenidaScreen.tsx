@@ -4,7 +4,7 @@ import { View, Text, } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from '../theme/app.Theme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { grey} from '../components/colores';
+import { grey, navy } from '../components/colores';
 import { TelasContext } from '../context/telasContext';
 
 interface Props extends StackScreenProps<any, any> { };
@@ -14,19 +14,19 @@ export const BienvenidaScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: 60 }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 30, color: '#fff' }}>
+        <Text style={{ fontWeight: 'bold', fontSize: 30, color: navy }}>
           Bienvenido, {telasState.username}
         </Text>
       </View>
       <View >
         <Text>
-        <Icon name='person-outline' size={300} color={grey}></Icon>
+          <Icon name='person-outline' size={300} color={grey}></Icon>
         </Text>
       </View>
       <View style={styles.containerSelector}>
-        <View style ={{width:'40%', marginRight:'5%'}}>
+        <View style={{ width: '40%', marginRight: '5%' }}>
           <TouchableOpacity
-            style={{ width: '100%'}}
+            style={{ width: '100%' }}
             activeOpacity={0.5}
             onPress={() => navigation.navigate('AuditoriaScreen')}
           >
@@ -35,7 +35,7 @@ export const BienvenidaScreen = ({ navigation }: Props) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style ={{width:'40%', marginLeft: '5%'}} >
+        <View style={{ width: '40%', marginLeft: '5%' }} >
           <TouchableOpacity
             style={{ width: '100%', }}
             onPress={() => navigation.navigate('HistorialScreen')}
