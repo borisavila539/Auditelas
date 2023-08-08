@@ -3,10 +3,11 @@ import { Text, View, FlatList, TouchableOpacity, TextInput } from 'react-native'
 import { styles } from '../theme/app.Theme';
 import { listaDefectosInterface } from '../interfaces/listaDefectos'
 import { TextoPantallas } from '../components/Constant';
-import { black, blue, grey, navy, navyclaro, orange, purpura } from '../components/colores';
+import { black, grey, orange } from '../components/colores';
 import { TelasContext } from '../context/telasContext';
 import { InsertAuditelas } from '../interfaces/insertAuditelas';
 import { reqResApiFinanza } from '../api/reqResApi';
+import MyAlert from '../components/myAlert';
 
 type defectoCardProps = {
     item: listaDefectosInterface,
@@ -21,6 +22,9 @@ export const AuditoriaProcess = () => {
     const { telasState } = useContext(TelasContext);
     const [YardasProveedor, setYardasProveedor] = useState<string>('')
     const [YardasReales, setYardasReales] = useState<string>('')
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
+    const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
+    const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
 
     const [Datos, setDatos] = useState<listaDefectosInterface[]>(
         [
@@ -35,12 +39,12 @@ export const AuditoriaProcess = () => {
                     id_Auditor_Creacion: telasState.usuarioId,
                     id_Rollo: telasState.IdRollo,
                     id_Estado: 1,
-                    id_Defecto: 1,
-                    total_Defectos: x.Total,
-                    nivel_1: x.Nivel_1,
-                    nivel_2: x.Nivel_2,
-                    nivel_3: x.Nivel_3,
-                    nivel_4: x.Nivel_4,
+                    id_Defecto: x.id,
+                    total_Defectos: ((x.Nivel_1 ? x.Nivel_1 : 0) + ((x.Nivel_2 ? x.Nivel_2 : 0) * 2) + ((x.Nivel_3 ? x.Nivel_3 : 0) * 3) + ((x.Nivel_4 ? x.Nivel_4 : 0) * 4)),
+                    nivel_1: x.Nivel_1 ? x.Nivel_1 : 0,
+                    nivel_2: x.Nivel_2 ? x.Nivel_2 : 0,
+                    nivel_3: x.Nivel_3 ? x.Nivel_3 : 0,
+                    nivel_4: x.Nivel_4 ? x.Nivel_4 : 0,
                 })
             })
             const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
@@ -61,22 +65,22 @@ export const AuditoriaProcess = () => {
             const nuevosDatos = [...Datos];
             switch (nivel) {
                 case 1:
-                    nuevosDatos[index].Nivel_1 = item2.Nivel_1 ? item2.Nivel_1 +1 : 0 + 1;
+                    nuevosDatos[index].Nivel_1 = item2.Nivel_1 ? item2.Nivel_1 + 1 : 0 + 1;
                     setDatos(nuevosDatos)
                     return
 
                 case 2:
-                    nuevosDatos[index].Nivel_2 = item2.Nivel_2 ? item2.Nivel_2 +1 : 0 + 1;
+                    nuevosDatos[index].Nivel_2 = item2.Nivel_2 ? item2.Nivel_2 + 1 : 0 + 1;
                     setDatos(nuevosDatos)
                     return
 
                 case 3:
-                    nuevosDatos[index].Nivel_3 = item2.Nivel_3 ? item2.Nivel_3 +1 : 0 + 1;
+                    nuevosDatos[index].Nivel_3 = item2.Nivel_3 ? item2.Nivel_3 + 1 : 0 + 1;
                     setDatos(nuevosDatos)
                     return
 
                 case 4:
-                    nuevosDatos[index].Nivel_4 = item2.Nivel_4 ? item2.Nivel_4 +1 : 0 + 1;
+                    nuevosDatos[index].Nivel_4 = item2.Nivel_4 ? item2.Nivel_4 + 1 : 0 + 1;
                     setDatos(nuevosDatos)
                     return
                 default:
@@ -86,22 +90,22 @@ export const AuditoriaProcess = () => {
             const nuevosDatos = [...Datos];
             switch (nivel) {
                 case 1:
-                    nuevosDatos[index].Nivel_1 = (item2.Nivel_1 - 1) >= 0 ? item2.Nivel_1 ? item2.Nivel_1 -1 : 0 - 1 : item2.Nivel_1;
+                    nuevosDatos[index].Nivel_1 = (item2.Nivel_1 - 1) >= 0 ? item2.Nivel_1 ? item2.Nivel_1 - 1 : 0 - 1 : item2.Nivel_1;
                     setDatos(nuevosDatos)
                     return
                     break;
                 case 2:
-                    nuevosDatos[index].Nivel_2 = (item2.Nivel_2 - 1) >= 0 ? item2.Nivel_2 ? item2.Nivel_2 -1 : 0 - 1 : item2.Nivel_2;
+                    nuevosDatos[index].Nivel_2 = (item2.Nivel_2 - 1) >= 0 ? item2.Nivel_2 ? item2.Nivel_2 - 1 : 0 - 1 : item2.Nivel_2;
                     setDatos(nuevosDatos)
                     return
                     break;
                 case 3:
-                    nuevosDatos[index].Nivel_3 = (item2.Nivel_3 - 1) >= 0 ? item2.Nivel_3 ? item2.Nivel_3 -1 : 0 - 1 : item2.Nivel_3;
+                    nuevosDatos[index].Nivel_3 = (item2.Nivel_3 - 1) >= 0 ? item2.Nivel_3 ? item2.Nivel_3 - 1 : 0 - 1 : item2.Nivel_3;
                     setDatos(nuevosDatos)
                     return
                     break;
                 case 4:
-                    nuevosDatos[index].Nivel_4 = (item2.Nivel_4 - 1) >= 0 ? item2.Nivel_4 ? item2.Nivel_4 -1 : 0 - 1 : item2.Nivel_4;
+                    nuevosDatos[index].Nivel_4 = (item2.Nivel_4 - 1) >= 0 ? item2.Nivel_4 ? item2.Nivel_4 - 1 : 0 - 1 : item2.Nivel_4;
                     setDatos(nuevosDatos)
                     return
                 default:
@@ -221,7 +225,7 @@ export const AuditoriaProcess = () => {
                             </View>
                         </View>
                         <View style={{ borderRadius: 5, alignItems: 'center' }}>
-                            <Text style={styles.textRender}>Total: { ((item.Nivel_1 ? item.Nivel_1 : 0) + ((item.Nivel_2 ? item.Nivel_2 : 0) * 2) + ((item.Nivel_3 ? item.Nivel_3 : 0) * 3) + ((item.Nivel_4 ? item.Nivel_4 : 0) * 4))}</Text>
+                            <Text style={styles.textRender}>Total: {((item.Nivel_1 ? item.Nivel_1 : 0) + ((item.Nivel_2 ? item.Nivel_2 : 0) * 2) + ((item.Nivel_3 ? item.Nivel_3 : 0) * 3) + ((item.Nivel_4 ? item.Nivel_4 : 0) * 4))}</Text>
                         </View>
                     </View >
                 </View>
@@ -234,30 +238,15 @@ export const AuditoriaProcess = () => {
         const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas')
         console.log(request.data)
 
+        if (request.data.length > 0) {
+            setMensajeAlerta('Auditoria enviada con exito')
+        } else {
+            setMensajeAlerta('Envió falló. Intente de nuevo')
+            setTipoMensaje(false);
+            setShowMensajeAlerta(true);
+        }
+        
         setDatos(request.data)
-
-        /*let data: listaDefectosInterface[] = [
-            { Id: 1, NombreDefecto: 'Hilo Grueso en trama', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 7 },
-            { Id: 2, NombreDefecto: 'Hilo Grueso en urdimbre', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 3, NombreDefecto: 'Faltante de hilo en trama', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 7 },
-            { Id: 4, NombreDefecto: 'Faltante de hilo en urdimbre', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 5, NombreDefecto: 'Franjas de colores', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 6, NombreDefecto: 'Plises', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 7 },
-            { Id: 7, NombreDefecto: 'Hilos de colores', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 8, NombreDefecto: 'Arrugas', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 7 },
-            { Id: 9, NombreDefecto: 'Hilo suelto', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 10, NombreDefecto: 'Nudos', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 11, NombreDefecto: 'Faltante de licra', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 7 },
-            { Id: 12, NombreDefecto: 'Desgaste', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 13, NombreDefecto: 'Piel de naranja', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 14, NombreDefecto: 'Mal teñido', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 15, NombreDefecto: 'Hoyos', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 16, NombreDefecto: 'Uniones/Traslapes', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 17, NombreDefecto: 'Manchas', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 18, NombreDefecto: 'Barrado', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-            { Id: 19, NombreDefecto: 'Otros', Nivel_1: 0, Nivel_2: 0, Nivel_3: 0, Nivel_4: 0, Cantidad: 0, Total: 24 },
-        ]*/
-        //setDatos(data)
     }
 
     useEffect(() => {
@@ -304,7 +293,7 @@ export const AuditoriaProcess = () => {
                     </View>
                     <View style={styles.viewsAuditoria}>
                         <TextInput editable={false} placeholder='Diferencia'
-                            value={(parseFloat(YardasProveedor == '' ? '0' : YardasProveedor) - parseFloat(YardasReales == '' ? '' : YardasReales)).toString()}
+                            value={(parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString()}
                             textAlign='center' keyboardType='decimal-pad'
                             placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
@@ -331,7 +320,10 @@ export const AuditoriaProcess = () => {
                 <View style={[styles.button, { backgroundColor: orange, height: 41, width: '50%', alignSelf: 'center' }]}>
                     <Text style={styles.text}>Enviar Auditoria</Text>
                 </View>
+
             </TouchableOpacity>
+            
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => onPressEnviar()} />
             <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10 }}>
                 <FlatList
                     data={Datos}

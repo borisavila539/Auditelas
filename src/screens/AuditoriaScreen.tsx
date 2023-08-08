@@ -51,18 +51,6 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
       setCargando(false)
     }
   }
-  // let historial: historialRollosInterface[] = [
-  //   { IdPieza: 'RO000001', NumeroRollo: '2454896', Fecha: '04/07/2023', estado: false },
-  //   { IdPieza: 'RO000002', NumeroRollo: '2459678', Fecha: '28/06/2023', estado: false },
-  //   { IdPieza: 'RO000003', NumeroRollo: '2453265', Fecha: '29/06/2023', estado: true },
-  //   { IdPieza: 'RO000004', NumeroRollo: '2451217', Fecha: '30/06/2023', estado: false },
-  //   { IdPieza: 'RO000005', NumeroRollo: '2455423', Fecha: '02/07/2023', estado: true },
-  //   { IdPieza: 'RO000006', NumeroRollo: '2453265', Fecha: '29/06/2023', estado: true },
-  //   { IdPieza: 'RO000007', NumeroRollo: '2451217', Fecha: '30/06/2023', estado: false },
-  //   { IdPieza: 'RO000008', NumeroRollo: '2455423', Fecha: '02/07/2023', estado: true },
-  //   { IdPieza: 'RO000009', NumeroRollo: '2451217', Fecha: '30/06/2023', estado: false },
-  //   { IdPieza: 'RO0000010', NumeroRollo: '2455423', Fecha: '02/07/2023', estado: true },
-  // ]
 
   const onPress = (item: rollos) => {
     changeApVendRoll(item.apVendRoll)
