@@ -12,13 +12,10 @@ import MyAlert from '../components/myAlert';
 type defectoCardProps = {
     item: listaDefectosInterface,
     index: number,
-    //onPressPlus: (item: listaDefectosInterface, index: number, nivel: number) => void,
-    //onPressMin: (item: listaDefectosInterface, index: number, nivel: number) => void,
 }
 
 export const AuditoriaProcess = () => {
     const [comentario, setComentario] = useState<string>("");
-    const { changeRolloId, changeApVendRoll, changeNameAlias } = useContext(TelasContext);
     const { telasState } = useContext(TelasContext);
     const [YardasProveedor, setYardasProveedor] = useState<string>('')
     const [YardasReales, setYardasReales] = useState<string>('')
@@ -245,7 +242,7 @@ export const AuditoriaProcess = () => {
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
         }
-        
+
         setDatos(request.data)
     }
 
@@ -320,9 +317,7 @@ export const AuditoriaProcess = () => {
                 <View style={[styles.button, { backgroundColor: orange, height: 41, width: '50%', alignSelf: 'center' }]}>
                     <Text style={styles.text}>Enviar Auditoria</Text>
                 </View>
-
             </TouchableOpacity>
-            
             <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => onPressEnviar()} />
             <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10 }}>
                 <FlatList
