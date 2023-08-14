@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useContext, useId } from 'react'
-import { Text, View, FlatList, TouchableOpacity, TextInput } from 'react-native'
+import { Text, View, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native'
 import { styles } from '../theme/app.Theme';
 import { listaDefectosInterface } from '../interfaces/listaDefectos'
 import { TextoPantallas } from '../components/Constant';
@@ -46,10 +46,13 @@ export const AuditoriaProcess = () => {
             })
             const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
             if (request.data.length > 0) {
-                let x = 0;
-                console.log(request.data[0])
+                setMensajeAlerta('Auditoría Enviada')
+                setTipoMensaje(true);
+                setShowMensajeAlerta(true);
             } else {
-                console.log('No se modificó!')
+                setMensajeAlerta('Error en el envío')
+                setTipoMensaje(false);
+                setShowMensajeAlerta(true);
             }
         } catch (error) {
             console.log(error)
@@ -233,17 +236,8 @@ export const AuditoriaProcess = () => {
     const GetData = async () => {
 
         const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas')
-        console.log(request.data)
 
-        if (request.data.length > 0) {
-            setMensajeAlerta('Auditoria enviada con exito')
-        } else {
-            setMensajeAlerta('Envió falló. Intente de nuevo')
-            setTipoMensaje(false);
-            setShowMensajeAlerta(true);
-        }
-
-        setDatos(request.data)
+       // setDatos(request.data)
     }
 
     useEffect(() => {
@@ -251,6 +245,7 @@ export const AuditoriaProcess = () => {
     }, [])
 
     return (
+
         <View style={{ alignItems: 'center', flex: 1 }}>
             <View style={{ backgroundColor: grey, borderWidth: 1 }}>
                 <Text style={{ fontSize: 14, color: 'black', fontWeight: 'bold' }}>Tela: {telasState.nameAlias} - {telasState.rollId} - {telasState.apVendRoll}</Text>
@@ -308,6 +303,7 @@ export const AuditoriaProcess = () => {
                         maxLength={300}
                     />
                 </View>
+
             </View>
             <TouchableOpacity
                 style={{ width: '90%' }}
@@ -317,8 +313,9 @@ export const AuditoriaProcess = () => {
                 <View style={[styles.button, { backgroundColor: orange, height: 41, width: '50%', alignSelf: 'center' }]}>
                     <Text style={styles.text}>Enviar Auditoria</Text>
                 </View>
+                <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
             </TouchableOpacity>
-            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => onPressEnviar()} />
+
             <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10 }}>
                 <FlatList
                     data={Datos}

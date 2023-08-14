@@ -107,7 +107,6 @@ export const DetalleHistorialScreen = () => {
     )
   }
   const GetData = async () => {
-
     const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas')
     console.log(request.data)
     setDatos(request.data)
