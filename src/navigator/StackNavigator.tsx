@@ -7,6 +7,7 @@ import { AuditoriaProcess } from '../screens/AuditoriaProcess';
 import LoginScreen from '../screens/LoginScreen';
 import { beige } from '../components/colores';
 import { DetalleHistorialScreen } from '../screens/DetalleHistorialScreen';
+import { AuditoriaEnProceso } from '../screens/AuditoriaEnProceso';
 
 export type RootStackParams = {
   LoginScreen: undefined,
@@ -15,6 +16,8 @@ export type RootStackParams = {
   HistorialScreen: undefined,
   AuditoriaProcess: undefined,
   DetalleHistorialScreen: undefined,
+  AuditoriaEnProceso: undefined,
+  
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -34,6 +37,7 @@ export const StackNavigator = () => {
       <Stack.Screen name="HistorialScreen" component={HistorialScreen} />
       <Stack.Screen name="AuditoriaProcess" component={AuditoriaProcess} />
       <Stack.Screen name="DetalleHistorialScreen" component={DetalleHistorialScreen} />
+      <Stack.Screen name="AuditoriaEnProceso" component={AuditoriaEnProceso} />
     </Stack.Navigator>
     //options={{ title: 'AuditoriaScreen' }}
   );

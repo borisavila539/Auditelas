@@ -6,6 +6,7 @@ import { FlatList, RefreshControl, TextInput } from 'react-native-gesture-handle
 import { reqResApiFinanza } from '../api/reqResApi';
 import { rollos } from '../interfaces/reqResApi';
 import { TelasContext } from '../context/telasContext';
+import { actualizarRollos } from '../interfaces/ActualizarRollos';
 
 interface Props extends StackScreenProps<any, any> { };
 
@@ -15,10 +16,9 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
   const [historial, setHistorial] = useState<rollos[]>([])
   const [page, setPage] = useState<number>(0)
   const [cargando, setCargando] = useState<boolean>(false)
-  const { changeApVendRoll, changeRolloId, changeNameAlias } = useContext(TelasContext);
+  const { changeApVendRoll, changeRolloId, changeNameAlias, changeIdRollo } = useContext(TelasContext);
 
   const reqRollos = async () => {
-    console.log("Inicio")
     if (!cargando) {
       setCargando(true)
       try {
@@ -33,12 +33,12 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
     }
   }
   const reqRollosMas = async () => {
-    console.log("Inicio")
     if (!cargando) {
       setCargando(true)
       try {
         let request2: rollos[] = []
         const request = await reqResApiFinanza.get<rollos[]>('Auditelas/' + (NumeroRollo != '' ? NumeroRollo : 'R') + '/' + (IdPieza != '' ? IdPieza : '-') + '/' + page + '/15');
+
         console.log(request.data)
         request.data.map((x) => {
           request2 = [...request2, x]
@@ -52,11 +52,22 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
     }
   }
 
-  const onPress = (item: rollos) => {
+  const onPress = async (item: rollos) => {
+    try {
+      let datos: actualizarRollos[] = [{ id: 0, id_Pieza: item.rollId, numero_Rollo_Proveedor: item.apVendRoll, observaciones: '' }]
+      const request = await reqResApiFinanza.post<actualizarRollos[]>('Auditelas/ActualizarRollos', datos);
+      changeIdRollo(request.data[0].id)
+    } catch (error) {
+      console.log(error)
+    }
+
+
+
+    changeRolloId(item.rollId)
     changeApVendRoll(item.apVendRoll)
     changeRolloId(item.rollId)
     changeNameAlias(item.nameAlias)
-    navigation.navigate('AuditoriaProcess')
+    navigation.navigate('AuditoriaEnProceso')
   }
   const renderItem = (item: rollos) => {
 

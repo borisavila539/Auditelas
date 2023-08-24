@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { beige, black, blue,  navy,  purpura, } from '../components/colores';
+import { beige, black, blue, navy, purpura, } from '../components/colores';
 import { FontFamily, TextButtons, TextoPantallas } from '../components/Constant';
 
 export const styles = StyleSheet.create({
@@ -86,8 +86,15 @@ export const styles = StyleSheet.create({
         fontSize: TextoPantallas,
         color: black,
         fontWeight: 'bold',
-        fontFamily: FontFamily
+        fontFamily: FontFamily,
     },
+    textTotal: {
+        color: black,
+        fontWeight: 'bold',
+        fontFamily: FontFamily,
+        alignSelf: 'center'
+    },
+
     input: {
         //padding: 2,
         marginLeft: 10,

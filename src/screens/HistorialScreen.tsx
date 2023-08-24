@@ -6,6 +6,7 @@ import { FlatList, RefreshControl, TextInput } from 'react-native-gesture-handle
 import { rollos } from '../interfaces/reqResApi';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { TelasContext } from '../context/telasContext';
+import { listaDefectosInterface } from '../interfaces/listaDefectos';
 
 
 interface Props extends StackScreenProps<any, any> { };
@@ -52,6 +53,8 @@ export const HistorialScreen = ({ navigation }: Props) => {
       setCargando(false)
     }
   }
+
+
 
   useEffect (() =>{
     reqRollos()
@@ -112,7 +115,7 @@ export const HistorialScreen = ({ navigation }: Props) => {
           renderItem={({ item }) => renderItem(item)}
           onEndReached={reqRollosMas}
           refreshControl={
-            <RefreshControl refreshing={false} onRefresh={() => reqRollos()} colors={['#069A8E']} />
+            <RefreshControl refreshing={false} onRefresh={() => reqRollos()} colors={['#0000']} />
           }
         >
         </FlatList>

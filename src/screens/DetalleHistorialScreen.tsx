@@ -8,6 +8,7 @@ import { black, grey } from '../components/colores';
 import { reqResApiFinanza } from '../api/reqResApi';
 
 
+
 type defectoCardProps = {
   item: listaDefectosInterface,
   index: number,
@@ -19,11 +20,30 @@ export const DetalleHistorialScreen = () => {
   const [comentario, setComentario] = useState<string>("");
   const [YardasProveedor, setYardasProveedor] = useState<string>('')
   const [YardasReales, setYardasReales] = useState<string>('')
+  const [cargando, setCargando] = useState<boolean>(false)
 
   const [Datos, setDatos] = useState<listaDefectosInterface[]>(
     [
     ]
   )
+  const GetData = async () => {
+    const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas')
+    
+    try {
+      const datos: listaDefectosInterface[] = request.data;
+
+      for (let index = 0; index < datos.length; index++) {
+        datos[index].Nivel_1 = 0
+        datos[index].Nivel_2 = 0
+        datos[index].Nivel_3 = 0
+        datos[index].Nivel_4 = 0
+        datos[index].Total = 0
+      }
+       setDatos(datos)
+    } catch (error) {
+    }
+
+  }
 
   const DefectosCard: FC<defectoCardProps> = ({ item, index
   }) => {
@@ -44,7 +64,7 @@ export const DetalleHistorialScreen = () => {
                 <View style={{ width: '33%' }}>
                 </View>
                 <View style={{ width: '33%', alignItems: 'center' }}>
-                  <Text style={styles.textRender}>{item.Nivel_1 ? item.Nivel_1 : 0}</Text>
+                  <Text style={styles.textRender}>{item.Nivel_1}</Text>
                 </View>
                 <View style={{ width: '33%' }}>
                 </View>
@@ -56,7 +76,6 @@ export const DetalleHistorialScreen = () => {
               </View>
               <View style={{ flexDirection: 'row', alignContent: 'center', width: '40%' }}>
                 <View style={{ width: '33%' }}>
-
                 </View>
                 <View style={{ width: '33%', alignItems: 'center' }}>
                   <Text style={styles.textRender}>{item.Nivel_2 ? item.Nivel_2 : 0}</Text>
@@ -106,11 +125,7 @@ export const DetalleHistorialScreen = () => {
       </View>
     )
   }
-  const GetData = async () => {
-    const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas')
-    console.log(request.data)
-    setDatos(request.data)
-  }
+
 
   useEffect(() => {
     GetData()
