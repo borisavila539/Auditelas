@@ -6,7 +6,6 @@ import { FlatList, RefreshControl, TextInput } from 'react-native-gesture-handle
 import { rollos } from '../interfaces/reqResApi';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { TelasContext } from '../context/telasContext';
-import { listaDefectosInterface } from '../interfaces/listaDefectos';
 
 
 interface Props extends StackScreenProps<any, any> { };
@@ -54,8 +53,6 @@ export const HistorialScreen = ({ navigation }: Props) => {
     }
   }
 
-
-
   useEffect (() =>{
     reqRollos()
   },[])
@@ -76,7 +73,7 @@ export const HistorialScreen = ({ navigation }: Props) => {
             width: '95%', borderWidth: 1, paddingHorizontal: 10, paddingVertical: 10, marginVertical: 2,
             borderColor: item.estado == true ? '#000' : 'red', borderRadius: 5
           }}>
-            <Text style={styles.textRender}>Id de Pieza: {item.rollId}</Text>
+            <Text style={styles.textRender}>Id de Pieza:{item.rollId}</Text>
             <Text style={styles.textRender}>Numero de rollo: {item.apVendRoll}</Text>
             <Text style={styles.textRender}>Tela: {item.nameAlias}</Text>
           </View>

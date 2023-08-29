@@ -2,10 +2,9 @@
 export interface listaDefectosInterface{
     id: number,
     descripcion: string,
-    Nivel_1: number,
-    Nivel_2: number,
-    Nivel_3: number,
-    Nivel_4: number,
-    Cantidad: number,
-    Total: number,
+    nivel_1: number,
+    nivel_2: number,
+    nivel_3: number,
+    nivel_4: number,
+    total_Defectos: number,
  }

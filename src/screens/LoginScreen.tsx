@@ -1,7 +1,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { FC, useContext, useState } from 'react'
 import { View, Text, TextInput, Image, Pressable, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native';
-import { blue, grey } from '../components/colores';
+import { beige, blue, grey, menta, navy, navyclaro, orange, purpura } from '../components/colores';
 import { TextButtons } from '../components/Constant';
 import MyAlert from '../components/myAlert';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -92,6 +92,7 @@ export const LoginScreen: FC<Props> = ({ navigation }) => {
             </Pressable>
           </View>
           <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
+           
             <TouchableOpacity
               style={{ width: '50%' }}
               activeOpacity={0.5}
@@ -108,6 +109,7 @@ export const LoginScreen: FC<Props> = ({ navigation }) => {
                 }
               </View>
             </TouchableOpacity>
+
           </View>
         </View>
       </View>
@@ -140,8 +142,10 @@ const styles = StyleSheet.create({
     height: '30%',
     justifyContent: 'space-around',
     maxWidth: 600,
+    backgroundColor:navy,
     alignItems: 'center',
     paddingVertical: 20,
+    borderRadius:20,
     paddingHorizontal: 20,
   },
   textInputAlign: {
