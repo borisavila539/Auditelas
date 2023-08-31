@@ -8,7 +8,7 @@ export interface TelasState {
     usuarioId: number,
     username: string,
     nameAlias: string,
-    IdRollo: number,
+    IdRollo: string,
 }
 
 //Colocar valor por default
@@ -18,7 +18,7 @@ export const TelasInitialState: TelasState = {
     usuarioId: 0,
     username: '',
     nameAlias: '1',
-    IdRollo: 1,
+    IdRollo: '1',
 }
 
 export interface TelasContextProps {
@@ -28,7 +28,7 @@ export interface TelasContextProps {
     changeRolloId: (rollId: string) => void;
     changeApVendRoll: (apVendRoll: string) => void;
     changeNameAlias: (nameAlias: string) => void;
-    changeIdRollo: (IdRollo: number) => void;
+    changeIdRollo: (IdRollo: string) => void;
 }
 
 export const TelasContext = createContext({} as TelasContextProps)
@@ -51,7 +51,7 @@ export const TelasProvider = ({ children }: any) => {
     const changeNameAlias = (nameAlias: string) => {
         dispatch({ type: 'changeNameAlias', payload: nameAlias })
     }
-    const changeIdRollo = (IdRollo: number) => {
+    const changeIdRollo = (IdRollo: string) => {
         dispatch({ type: 'changeIdRollo', payload: IdRollo })
     }
     return (

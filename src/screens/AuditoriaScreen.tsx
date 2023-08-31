@@ -8,6 +8,7 @@ import { rollos } from '../interfaces/reqResApi';
 import { TelasContext } from '../context/telasContext';
 import { actualizarRollos } from '../interfaces/ActualizarRollos';
 
+
 interface Props extends StackScreenProps<any, any> { };
 
 export const AuditoriaScreen = ({ navigation }: Props) => {
@@ -54,20 +55,19 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
 
   const onPress = async (item: rollos) => {
     try {
-      let datos: actualizarRollos[] = [{ id: 0, id_Pieza: item.rollId, numero_Rollo_Proveedor: item.apVendRoll, observaciones: '' }]
+      const datos: actualizarRollos[] = [{ id: '0', id_Pieza: item.rollId, numero_Rollo_Proveedor: item.apVendRoll, observaciones: '' }]
       const request = await reqResApiFinanza.post<actualizarRollos[]>('Auditelas/ActualizarRollos', datos);
       changeIdRollo(request.data[0].id)
     } catch (error) {
       console.log(error)
     }
 
-
-
     changeRolloId(item.rollId)
     changeApVendRoll(item.apVendRoll)
     changeRolloId(item.rollId)
     changeNameAlias(item.nameAlias)
     navigation.navigate('AuditoriaEnProceso')
+
   }
   const renderItem = (item: rollos) => {
 
@@ -126,7 +126,8 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
           refreshControl={
             <RefreshControl refreshing={false} onRefresh={() => reqRollos()} colors={['#069A8E']} />
           }
-        >
+          
+        >      
         </FlatList>
       </View>
     </View>

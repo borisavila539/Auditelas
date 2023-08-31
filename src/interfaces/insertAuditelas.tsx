@@ -1,6 +1,6 @@
 export interface InsertAuditelas{
     id_Auditor_Creacion: number,
-    id_Rollo: number,
+    id_Rollo: string,
     id_Estado: number,
     id_Defecto: number,
     total_Defectos: number,
