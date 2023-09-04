@@ -112,13 +112,11 @@ export const HistorialScreen = ({ navigation }: Props) => {
           renderItem={({ item }) => renderItem(item)}
           onEndReached={reqRollosMas}
           refreshControl={
-            <RefreshControl refreshing={false} onRefresh={() => reqRollos()} colors={['#0000']} />
+            <RefreshControl refreshing={false} onRefresh={() => reqRollos()}  />
           }
         >
         </FlatList>
       </View>
     </View>
-
   )
 }
-

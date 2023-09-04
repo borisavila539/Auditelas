@@ -9,6 +9,7 @@ import { reqResApiFinanza } from '../api/reqResApi';
 import MyAlert from '../components/myAlert';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Niveles } from '../components/Niveles';
+import { yardasRealesInterface } from '../interfaces/yardas';
 
 interface Props extends StackScreenProps<any, any> { };
 
@@ -23,6 +24,8 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     const [Datos, setDatos] = useState<listaDefectosInterface[]>([]);
     const [cargando, setCargando] = useState<boolean>(false);
     const [enviando, setEnviando] = useState<boolean>(false);
+
+    
 
     const onPressEnviar = async () => {
 
@@ -44,6 +47,16 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     }
                 ));
 
+                let enviar2: yardasRealesInterface[] = [{
+                    id_Rollo: telasState.IdRollo, 
+                    ancho_1:0, 
+                    ancho_2:2,
+                    ancho_3:3, 
+                    yardas_Proveedor:1,
+                     yardas_Reales:3, 
+                     diferencia_Yardas:1, 
+                     observaciones:'hg'
+                    }]
 
                 const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
                 if (request.data.length > 0) {
@@ -63,6 +76,15 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     }
                     catch (error) {
                         setMensajeAlerta('Error en el envío en AX')
+                        setTipoMensaje(false);
+                        setShowMensajeAlerta(true);
+                    }
+                    try {
+                        const request3 = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/InsertarAnchoYardas' + telasState.IdRollo);
+
+                    }
+                    catch (error) {
+                        setMensajeAlerta('Error envío en AX')
                         setTipoMensaje(false);
                         setShowMensajeAlerta(true);
                     }
@@ -106,7 +128,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         return (
             <View style={{ width: '100%', flexDirection: 'row', alignContent: 'center', alignItems: 'center' }}>
 
-                <View style={{ width: '95%', borderWidth: 1, alignItems: 'center', borderRadius: 10, marginTop: 5 }}>
+                <View style={{ width: '98%', borderWidth: 1, alignItems: 'center', borderRadius: 5, marginTop: 5 }}>
 
                     <Text style={{ color: '#000' }}>{item.descripcion}</Text>
 
@@ -266,7 +288,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 </View>
             </TouchableOpacity>
 
-            <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10 }}>
+            <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10, alignItems:'center' }}>
                 {
                     cargando ?
                         <ActivityIndicator size={'large'} />
@@ -276,12 +298,11 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                                 data={Datos}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item, index }) => renderItem(item, index)}
-
                                 extraData={false}
                             />
                             :
                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                                <Text style={styles.text}>No cargo</Text>
+                                <Text style={styles.text}>No cargó</Text>
                             </View>
                 }
             </View>
