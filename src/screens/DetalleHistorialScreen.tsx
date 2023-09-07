@@ -186,7 +186,7 @@ export const DetalleHistorialScreen = () => {
         <FlatList
           data={Datos}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item, index }) => <DefectosCard index={index} item={item}
+          renderItem={({ item, index}) => <DefectosCard index={index} item={item}
           />}
           style={{ flex: 1, width: '100%' }}>
         </FlatList>

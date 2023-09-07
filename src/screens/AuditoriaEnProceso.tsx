@@ -14,18 +14,21 @@ import { yardasRealesInterface } from '../interfaces/yardas';
 interface Props extends StackScreenProps<any, any> { };
 
 export const AuditoriaEnProceso = ({ navigation }: Props) => {
-    const [comentario, setComentario] = useState<string>("");
     const { telasState } = useContext(TelasContext);
     const [YardasProveedor, setYardasProveedor] = useState<string>('')
     const [YardasReales, setYardasReales] = useState<string>('')
+    const [DiferenciaYardas, setDiferenciaYardas] = useState<string>('')
     const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
     const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
     const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
     const [Datos, setDatos] = useState<listaDefectosInterface[]>([]);
     const [cargando, setCargando] = useState<boolean>(false);
     const [enviando, setEnviando] = useState<boolean>(false);
+    const [ancho1, setAncho1] = useState<string>('');
+    const [ancho2, setAncho2] = useState<string>('');
+    const [ancho3, setAncho3] = useState<string>('');
+    const [observaciones, setobservaciones] = useState<string>('');
 
-    
 
     const onPressEnviar = async () => {
 
@@ -46,17 +49,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         nivel_4: x.nivel_4 ? x.nivel_4 : 0,
                     }
                 ));
-
-                let enviar2: yardasRealesInterface[] = [{
-                    id_Rollo: telasState.IdRollo, 
-                    ancho_1:0, 
-                    ancho_2:2,
-                    ancho_3:3, 
-                    yardas_Proveedor:1,
-                     yardas_Reales:3, 
-                     diferencia_Yardas:1, 
-                     observaciones:'hg'
-                    }]
 
                 const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
                 if (request.data.length > 0) {
@@ -79,30 +71,50 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         setTipoMensaje(false);
                         setShowMensajeAlerta(true);
                     }
-                    try {
-                        const request3 = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/InsertarAnchoYardas' + telasState.IdRollo);
 
-                    }
-                    catch (error) {
-                        setMensajeAlerta('Error envío en AX')
-                        setTipoMensaje(false);
-                        setShowMensajeAlerta(true);
-                    }
-                } else {
-                    setMensajeAlerta('Error en el envío')
-                    setTipoMensaje(false);
-                    setShowMensajeAlerta(true);
                 }
 
-            } catch (error) {
+            }
+            catch (error) {
+                console.log(error)
                 setMensajeAlerta('Error en el envío')
                 setTipoMensaje(false);
                 setShowMensajeAlerta(true);
             }
-            setEnviando(false)
+
+            let enviar2: yardasRealesInterface[] = [{
+                id_Rollo: parseInt(telasState.IdRollo),
+                ancho_1: parseFloat(ancho1),
+                ancho_2: parseFloat(ancho2),
+                ancho_3: parseFloat(ancho3),
+                yardas_Proveedor: parseFloat(YardasProveedor),
+                yardas_Reales: parseFloat(YardasReales),
+                diferencia_Yardas: parseFloat((parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString(),),
+                observaciones: observaciones,
+            }]
+
+            try {
+                const request3 = await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
+
+                if (request3.data.length > 0) {
+                    setMensajeAlerta('Ancho Enviado')
+                    setTipoMensaje(true);
+                    setShowMensajeAlerta(true);
+                } else {
+                    setMensajeAlerta('Error enviando ancho')
+                    setTipoMensaje(false);
+                    setShowMensajeAlerta(true);
+                }
+            } catch (error) {
+                console.log(error)
+                setMensajeAlerta('Error enviando ancho')
+                setTipoMensaje(false);
+                setShowMensajeAlerta(true);
+            }
+
         }
 
-
+        setEnviando(false)
 
     }
 
@@ -163,7 +175,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         nivel={item.nivel_2}
                         text='Nivel 2'
 
-
                     />
 
                     <Niveles item={item}
@@ -181,7 +192,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         nivel={item.nivel_3}
                         text='Nivel 3'
 
-
                     />
 
                     <Niveles item={item}
@@ -198,7 +208,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         }}
                         nivel={item.nivel_4}
                         text='Nivel 4'
-
 
                     />
 
@@ -227,13 +236,22 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.viewsAuditoria}>
-                        <TextInput placeholder='Inicio' textAlign='center' keyboardType='decimal-pad' placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+                        <TextInput placeholder='Inicio' textAlign='center' keyboardType='decimal-pad'
+                            value={ancho1}
+                            onChangeText={(value) => setAncho1(value)}
+                            placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
                     <View style={styles.viewsAuditoria}>
-                        <TextInput placeholder='Medio' textAlign='center' keyboardType='decimal-pad' placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+                        <TextInput placeholder='Medio' textAlign='center' keyboardType='decimal-pad'
+                            value={ancho2}
+                            onChangeText={(value) => setAncho2(value)}
+                            placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
                     <View style={styles.viewsAuditoria}>
-                        <TextInput placeholder='Final' textAlign='center' keyboardType='decimal-pad' placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+                        <TextInput placeholder='Final' textAlign='center' keyboardType='decimal-pad'
+                            value={ancho3}
+                            onChangeText={(value) => setAncho3(value)}
+                            placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
                 </View>
                 <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
@@ -269,8 +287,8 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         style={{ color: black }}
                         placeholderTextColor={grey}
                         multiline={true}
-                        onChangeText={(value) => setComentario(value)}
-                        value={comentario}
+                        onChangeText={(value) => setobservaciones(value)}
+                        value={observaciones}
                         maxLength={300}
                     />
                 </View>
@@ -288,7 +306,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 </View>
             </TouchableOpacity>
 
-            <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10, alignItems:'center' }}>
+            <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10, alignItems: 'center' }}>
                 {
                     cargando ?
                         <ActivityIndicator size={'large'} />

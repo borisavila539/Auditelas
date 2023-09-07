@@ -1,5 +1,5 @@
 export interface yardasRealesInterface{
-    id_Rollo: string,
+    id_Rollo: number,
     ancho_1: number,
     ancho_2: number,
     ancho_3: number,
