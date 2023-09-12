@@ -50,6 +50,17 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     }
                 ));
 
+                let enviar2: yardasRealesInterface[] = [{
+                    id_Rollo: parseInt(telasState.IdRollo),
+                    ancho_1: parseFloat(ancho1),
+                    ancho_2: parseFloat(ancho2),
+                    ancho_3: parseFloat(ancho3),
+                    yardas_Proveedor: parseFloat(YardasProveedor),
+                    yardas_Reales: parseFloat(YardasReales),
+                    diferencia_Yardas: parseFloat((parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString(),),
+                    observaciones: observaciones,
+                }]
+
                 const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
                 if (request.data.length > 0) {
 
@@ -71,7 +82,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         setTipoMensaje(false);
                         setShowMensajeAlerta(true);
                     }
-
+                    const request3 = await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
                 }
 
             }
@@ -81,37 +92,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 setTipoMensaje(false);
                 setShowMensajeAlerta(true);
             }
-
-            let enviar2: yardasRealesInterface[] = [{
-                id_Rollo: parseInt(telasState.IdRollo),
-                ancho_1: parseFloat(ancho1),
-                ancho_2: parseFloat(ancho2),
-                ancho_3: parseFloat(ancho3),
-                yardas_Proveedor: parseFloat(YardasProveedor),
-                yardas_Reales: parseFloat(YardasReales),
-                diferencia_Yardas: parseFloat((parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString(),),
-                observaciones: observaciones,
-            }]
-
-            try {
-                const request3 = await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
-
-                if (request3.data.length > 0) {
-                    setMensajeAlerta('Ancho Enviado')
-                    setTipoMensaje(true);
-                    setShowMensajeAlerta(true);
-                } else {
-                    setMensajeAlerta('Error enviando ancho')
-                    setTipoMensaje(false);
-                    setShowMensajeAlerta(true);
-                }
-            } catch (error) {
-                console.log(error)
-                setMensajeAlerta('Error enviando ancho')
-                setTipoMensaje(false);
-                setShowMensajeAlerta(true);
-            }
-
         }
 
         setEnviando(false)
@@ -125,7 +105,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
             const datos: listaDefectosInterface[] = request.data;
 
             console.log(telasState.IdRollo)
-            //Datos2 = datos
             setDatos(datos)
         } catch (err) {
 

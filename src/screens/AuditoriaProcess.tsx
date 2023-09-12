@@ -214,11 +214,11 @@ export const AuditoriaProcess = () => {
         const datos: listaDefectosInterface[] = request.data;
 
         for (let index = 0; index < datos.length; index++) {
-            datos[index].Nivel_1 = 0
-            datos[index].Nivel_2 = 0
-            datos[index].Nivel_3 = 0
-            datos[index].Nivel_4 = 0
-            datos[index].Total = 0
+            datos[index].nivel_1 = 0
+            datos[index].nivel_2 = 0
+            datos[index].nivel_3 = 0
+            datos[index].nivel_4 = 0
+            datos[index].total_Defectos = 0
         }
         //Datos2 = datos
         setDatos(datos)

@@ -3,10 +3,10 @@ import { View, Text, FlatList, TextInput } from 'react-native';
 import { styles } from '../theme/app.Theme';
 import { TelasContext } from '../context/telasContext';
 import { listaDefectosInterface } from '../interfaces/listaDefectos';
-import { rollos } from '../interfaces/reqResApi';
 import { black, grey } from '../components/colores';
 import { reqResApiFinanza } from '../api/reqResApi';
-
+import { anchosinterface } from '../interfaces/anchos';
+import { rollos } from '../interfaces/reqResApi';
 
 
 type defectoCardProps = {
@@ -14,30 +14,56 @@ type defectoCardProps = {
   index: number,
 }
 
+type anchoCardProps = {
+  item: anchosinterface,
+  index: number,
+}
+
 export const DetalleHistorialScreen = () => {
   const { telasState } = useContext(TelasContext);
-  const [historial, setHistorial] = useState<rollos[]>([])
   const [comentario, setComentario] = useState<string>("");
   const [YardasProveedor, setYardasProveedor] = useState<string>('')
   const [YardasReales, setYardasReales] = useState<string>('')
-  const [cargando, setCargando] = useState<boolean>(false)
+  const [ancho1, setancho1] = useState<string>('')
+  const [ancho2, setancho2] = useState<string>('')
+  const [ancho3, setancho3] = useState<string>('')
 
   const [Datos, setDatos] = useState<listaDefectosInterface[]>(
     [
     ]
   )
-  const GetData = async () => {
 
+
+  const GetData = async () => {
+    console.log(telasState.IdRollo)
+    let id: Number = 0;
     try {
-      const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas/' + telasState.IdRollo)
-      const datos: listaDefectosInterface[] = request.data;
-      console.log(datos)
-      setDatos(datos)
+      const request = await reqResApiFinanza.get<anchosinterface[]>('Auditelas/DetalleRolloYardas/' +telasState.rollId+'/'+telasState.apVendRoll )
+      const datos2 = request.data;
+      console.log(datos2[0])
+      id = datos2[0].id_Rollo
+      setancho1(datos2[0].ancho_1 + '')
+      setancho2(datos2[0].ancho_2 + '')
+      setancho3(datos2[0].ancho_3 + '')
+      setYardasProveedor(datos2[0].yardas_Proveedor + '');
+      setYardasReales(datos2[0].yardas_Reales + '');
+      setComentario(datos2[0].observaciones)
+
+
     } catch (error) {
     }
-  }
+    try {
+      const request = await reqResApiFinanza.get<listaDefectosInterface[]>('Auditelas/DatosDefectosTelas/' + id)
+      const datos: listaDefectosInterface[] = request.data;
+      console.log(telasState.IdRollo)
+      setDatos(datos)
+    } catch (error) {
+      console.log(error)
+    }
 
-  const DefectosCard: FC<defectoCardProps> = ({ item, index
+    
+  }
+  const DefectosCard: FC<defectoCardProps> = ({ item,index
   }) => {
 
     return (
@@ -122,6 +148,7 @@ export const DetalleHistorialScreen = () => {
     GetData()
   }, [])
 
+
   return (
     <View style={{ alignItems: 'center', flex: 1 }}>
       <View style={{ backgroundColor: grey, borderWidth: 1 }}>
@@ -133,13 +160,13 @@ export const DetalleHistorialScreen = () => {
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.viewsAuditoria}>
-            <TextInput editable={false} placeholder='Inicio' textAlign='center' keyboardType='decimal-pad' placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+            <TextInput editable={false} textAlign='center' value={ancho1} keyboardType='decimal-pad' placeholderTextColor={black} style={{ color: black, backgroundColor: 'white' }}></TextInput>
           </View>
           <View style={styles.viewsAuditoria}>
-            <TextInput editable={false} placeholder='Medio' textAlign='center' keyboardType='decimal-pad' placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+            <TextInput editable={false} textAlign='center' placeholder={ancho2} keyboardType='decimal-pad' placeholderTextColor={black} style={{ color: black, backgroundColor: 'white' }}></TextInput>
           </View>
           <View style={styles.viewsAuditoria}>
-            <TextInput placeholder='Final' textAlign='center' keyboardType='decimal-pad' placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+            <TextInput editable={false} textAlign='center' placeholder={ancho3} keyboardType='decimal-pad' placeholderTextColor={black} style={{ color: black, backgroundColor: 'white' }}></TextInput>
           </View>
         </View>
         <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
@@ -147,36 +174,40 @@ export const DetalleHistorialScreen = () => {
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <View style={styles.viewsAuditoria}>
-            <TextInput editable={false} placeholder='Yardas Proveedor'
+            <TextInput editable={false}
               value={YardasProveedor}
               onChangeText={(value) => setYardasProveedor(value)}
               textAlign='center' keyboardType='decimal-pad'
               placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
           </View>
+
           <View style={styles.viewsAuditoria}>
-            <TextInput editable={false} placeholder='Yardas Reales'
+            <TextInput editable={false}
               value={YardasReales}
               onChangeText={(value) => setYardasReales(value)}
               textAlign='center' keyboardType='decimal-pad'
               placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
           </View>
+
           <View style={styles.viewsAuditoria}>
-            <TextInput editable={false} placeholder='Diferencia'
-              value={(parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString()}
+            <TextInput editable={false}
               textAlign='center' keyboardType='decimal-pad'
-              placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+              placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}
+              value={(parseFloat(YardasProveedor)-parseFloat(YardasReales))+''}></TextInput>
           </View>
         </View>
+
         <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
           Comentarios:
         </Text>
         <View style={{ width: '60%', margin: 2, borderRadius: 5, borderWidth: 1, backgroundColor: 'white' }}>
           <TextInput
+            //placeholder={'1'}
             editable={false}
             style={{ color: black }}
             placeholderTextColor={grey}
             multiline={true}
-            onChangeText={(value) => setComentario(value)}
+            //onChangeText={(value) => setComentario(value)}
             value={comentario}
             maxLength={300}
           />
@@ -186,7 +217,7 @@ export const DetalleHistorialScreen = () => {
         <FlatList
           data={Datos}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item, index}) => <DefectosCard index={index} item={item}
+          renderItem={({ item, index }) => <DefectosCard index={index} item={item}
           />}
           style={{ flex: 1, width: '100%' }}>
         </FlatList>
@@ -194,3 +225,4 @@ export const DetalleHistorialScreen = () => {
     </View>
   )
 }
+

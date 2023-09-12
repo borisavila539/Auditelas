@@ -85,12 +85,12 @@ export const HistorialScreen = ({ navigation }: Props) => {
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
       <View style={{ width: '80%', maxWidth: 500, marginTop: 10 }}>
-        <Text style={styles.textRender}>Numero de rollo :</Text>
+        <Text style={styles.textRender}>Id Pieza:</Text>
         <TextInput style={styles.textInputs} value={NumeroRollo}
           onChangeText={(value) => setNumeroRollo(value)}
         >
         </TextInput>
-        <Text style={styles.textRender}>Id de Pieza :</Text>
+        <Text style={styles.textRender}>Numero de rollo :</Text>
         <TextInput style={styles.textInputs} value={IdPieza}
           onChangeText={(value) => setIdPieza(value)}
         ></TextInput>
