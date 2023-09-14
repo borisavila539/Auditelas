@@ -10,8 +10,10 @@ import MyAlert from '../components/myAlert';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Niveles } from '../components/Niveles';
 import { yardasRealesInterface } from '../interfaces/yardas';
+import { rollos } from '../interfaces/reqResApi';
 
 interface Props extends StackScreenProps<any, any> { };
+
 
 export const AuditoriaEnProceso = ({ navigation }: Props) => {
     const { telasState } = useContext(TelasContext);
@@ -28,6 +30,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     const [ancho2, setAncho2] = useState<string>('');
     const [ancho3, setAncho3] = useState<string>('');
     const [observaciones, setobservaciones] = useState<string>('');
+    const [PM, setPM] = useState<number>(0);
 
 
     const onPressEnviar = async () => {
@@ -121,7 +124,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
 
                 <View style={{ width: '98%', borderWidth: 1, alignItems: 'center', borderRadius: 5, marginTop: 5 }}>
 
-                    <Text style={{ color: '#000' }}>{item.descripcion}</Text>
+                    <Text style={{ color: '#000', fontWeight: 'bold', fontSize: 18 }}>{item.descripcion}</Text>
 
                     <Niveles item={item}
                         onPressMin={(num: any) => {
@@ -153,7 +156,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         }}
                         nivel={item.nivel_2}
                         text='Nivel 2'
-
                     />
 
                     <Niveles item={item}
@@ -170,7 +172,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         }}
                         nivel={item.nivel_3}
                         text='Nivel 3'
-
                     />
 
                     <Niveles item={item}
@@ -199,9 +200,33 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         )
     }
 
+    const CalculoPM = () => {
+        let calculo: number = 0;
+        let total: number = 0;
+        Datos.forEach(x => {
+            total += x.total_Defectos
+        })
+
+        calculo = (total * 100)/(
+                                    (
+                                        (
+                                            (parseFloat(ancho1 == ""? '0' : ancho1)+parseFloat(ancho2== ""? '0' : ancho2)+parseFloat(ancho3== ""? '0' : ancho3))/3
+                                        )
+                                        *0.0254
+                                    )* parseFloat(YardasProveedor== ""? '0' : YardasProveedor)
+                                );
+        setPM(calculo)
+
+    }
+
+    useEffect(() => {
+        CalculoPM()
+    }, [Datos])
+
     useEffect(() => {
         GetData()
     }, [])
+
 
     return (
 
@@ -234,18 +259,18 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     </View>
                 </View>
                 <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
-                    Yardas Reales:
+                    Metros Reales:
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.viewsAuditoria}>
-                        <TextInput placeholder='Yardas Proveedor'
+                        <TextInput placeholder='Metros Proveedor'
                             value={YardasProveedor}
                             onChangeText={(value) => setYardasProveedor(value)}
                             textAlign='center' keyboardType='decimal-pad'
                             placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
                     <View style={styles.viewsAuditoria}>
-                        <TextInput placeholder='Yardas Reales'
+                        <TextInput placeholder='Metros Reales'
                             value={YardasReales}
                             onChangeText={(value) => setYardasReales(value)}
                             textAlign='center' keyboardType='decimal-pad'
@@ -258,18 +283,28 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                             placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
                 </View>
+
+
                 <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
-                    Comentarios:
+                    Comentarios:                                                                                               PM/2
                 </Text>
-                <View style={{ width: '60%', margin: 2, borderRadius: 5, borderWidth: 1, backgroundColor: 'white' }}>
-                    <TextInput
-                        style={{ color: black }}
-                        placeholderTextColor={grey}
-                        multiline={true}
-                        onChangeText={(value) => setobservaciones(value)}
-                        value={observaciones}
-                        maxLength={300}
-                    />
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ width: '60%', margin: 2, borderRadius: 5, borderWidth: 1, backgroundColor: 'white' }}>
+                        <TextInput
+                            style={{ color: black }}
+                            placeholderTextColor={grey}
+                            multiline={true}
+                            onChangeText={(value) => setobservaciones(value)}
+                            value={observaciones}
+                            maxLength={300}
+                        />
+                    </View>
+                    <View style={styles.viewsAuditoria}>
+                        <TextInput editable={false}
+                            value={PM + ''}
+                            textAlign='center'
+                            placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+                    </View>
                 </View>
             </View>
 

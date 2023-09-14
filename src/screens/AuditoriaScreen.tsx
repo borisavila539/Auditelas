@@ -102,7 +102,7 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
           onChangeText={(value) => setNumeroRollo(value)}
         ></TextInput>
 
-        <Text style={styles.textRender}>Numero de rollo</Text>
+        <Text style={styles.textRender}>Numero de rollo proveedor</Text>
         <TextInput style={styles.textInputs} value={IdPieza}
           onChangeText={(value) => setIdPieza(value)}
         ></TextInput>

@@ -71,7 +71,7 @@ export const HistorialScreen = ({ navigation }: Props) => {
         <TouchableOpacity style={{ flex: 1, width: '100%', alignItems: 'center' }} onPress={() => onPress(item)}>
           <View style={{
             width: '95%', borderWidth: 1, paddingHorizontal: 10, paddingVertical: 10, marginVertical: 2,
-            borderColor: item.estado == true ? '#000' : 'red', borderRadius: 5
+            borderColor: item.estado == true ? 'black' : 'black', borderRadius: 5
           }}>
             <Text style={styles.textRender}>Id de Pieza:{item.rollId}</Text>
             <Text style={styles.textRender}>Numero de rollo: {item.apVendRoll}</Text>
@@ -90,7 +90,7 @@ export const HistorialScreen = ({ navigation }: Props) => {
           onChangeText={(value) => setNumeroRollo(value)}
         >
         </TextInput>
-        <Text style={styles.textRender}>Numero de rollo :</Text>
+        <Text style={styles.textRender}>Numero de rollo proveedor:</Text>
         <TextInput style={styles.textInputs} value={IdPieza}
           onChangeText={(value) => setIdPieza(value)}
         ></TextInput>

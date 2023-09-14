@@ -27,6 +27,7 @@ export const DetalleHistorialScreen = () => {
   const [ancho1, setancho1] = useState<string>('')
   const [ancho2, setancho2] = useState<string>('')
   const [ancho3, setancho3] = useState<string>('')
+  const [PM, setPM] = useState<number>(0);
 
   const [Datos, setDatos] = useState<listaDefectosInterface[]>(
     [
@@ -38,7 +39,7 @@ export const DetalleHistorialScreen = () => {
     console.log(telasState.IdRollo)
     let id: Number = 0;
     try {
-      const request = await reqResApiFinanza.get<anchosinterface[]>('Auditelas/DetalleRolloYardas/' +telasState.rollId+'/'+telasState.apVendRoll )
+      const request = await reqResApiFinanza.get<anchosinterface[]>('Auditelas/DetalleRolloYardas/' + telasState.rollId + '/' + telasState.apVendRoll)
       const datos2 = request.data;
       console.log(datos2[0])
       id = datos2[0].id_Rollo
@@ -61,9 +62,9 @@ export const DetalleHistorialScreen = () => {
       console.log(error)
     }
 
-    
+
   }
-  const DefectosCard: FC<defectoCardProps> = ({ item,index
+  const DefectosCard: FC<defectoCardProps> = ({ item, index
   }) => {
 
     return (
@@ -193,25 +194,32 @@ export const DetalleHistorialScreen = () => {
             <TextInput editable={false}
               textAlign='center' keyboardType='decimal-pad'
               placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}
-              value={(parseFloat(YardasProveedor)-parseFloat(YardasReales))+''}></TextInput>
+              value={(parseFloat(YardasProveedor) - parseFloat(YardasReales)) + ''}></TextInput>
           </View>
         </View>
 
         <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
           Comentarios:
         </Text>
+        <View style={{ flexDirection: 'row' }}>
         <View style={{ width: '60%', margin: 2, borderRadius: 5, borderWidth: 1, backgroundColor: 'white' }}>
           <TextInput
-            //placeholder={'1'}
             editable={false}
             style={{ color: black }}
             placeholderTextColor={grey}
             multiline={true}
-            //onChangeText={(value) => setComentario(value)}
             value={comentario}
             maxLength={300}
           />
         </View>
+        <View style={styles.viewsAuditoria}>
+          <TextInput editable={false}
+            value={PM + ''}
+            textAlign='center'
+            placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
+        </View>
+        </View>
+
       </View>
       <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10 }}>
         <FlatList
