@@ -30,7 +30,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     const [ancho2, setAncho2] = useState<string>('');
     const [ancho3, setAncho3] = useState<string>('');
     const [observaciones, setobservaciones] = useState<string>('');
-    const [PM, setPM] = useState<number>(0);
+    const [PM, setPM] = useState<string>('');
 
 
     const onPressEnviar = async () => {
@@ -69,11 +69,12 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
 
                     try {
                         const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
-
+                        
                         if (request2.data = 'Creado' || request2.data == 'Actualizado') {
                             setMensajeAlerta('Auditoría Enviada')
                             setTipoMensaje(true);
                             setShowMensajeAlerta(true);
+                            CalculoPM()
                         } else {
                             setMensajeAlerta(request2.data)
                             setTipoMensaje(false);
@@ -206,27 +207,27 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         Datos.forEach(x => {
             total += x.total_Defectos
         })
-
-        calculo = (total * 100)/(
-                                    (
-                                        (
-                                            (parseFloat(ancho1 == ""? '0' : ancho1)+parseFloat(ancho2== ""? '0' : ancho2)+parseFloat(ancho3== ""? '0' : ancho3))/3
-                                        )
-                                        *0.0254
-                                    )* parseFloat(YardasProveedor== ""? '0' : YardasProveedor)
-                                );
-        setPM(calculo)
+        let denominador : number = (
+            (
+                (
+                    (parseFloat(ancho1 == ""? '0' : ancho1)+(parseFloat(ancho2== ""? '0' : ancho2))+(parseFloat(ancho3== ""? '0' : ancho3)))/3
+                )
+                *0.0254
+            )* parseFloat(YardasProveedor== ""? '0' : YardasProveedor)
+        );
+        calculo = (total * 100)/(denominador>0?denominador: 1);
+        setPM(parseFloat(calculo.toFixed(2)) > 0 ?calculo.toFixed(2):'')
 
     }
-
-    useEffect(() => {
-        CalculoPM()
-    }, [Datos])
+    
 
     useEffect(() => {
         GetData()
     }, [])
 
+   
+
+   
 
     return (
 
@@ -286,7 +287,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
 
 
                 <Text style={{ fontWeight: 'bold', fontSize: 12, color: 'black' }}>
-                    Comentarios:                                                                                               PM/2
+                    Comentarios:                                                                                               PM/2:
                 </Text>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: '60%', margin: 2, borderRadius: 5, borderWidth: 1, backgroundColor: 'white' }}>
