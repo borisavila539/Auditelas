@@ -8,6 +8,8 @@ import LoginScreen from '../screens/LoginScreen';
 import { beige } from '../components/colores';
 import { DetalleHistorialScreen } from '../screens/DetalleHistorialScreen';
 import { AuditoriaEnProceso } from '../screens/AuditoriaEnProceso';
+import { SeleccionAuditoria } from '../screens/SeleccionAuditoria';
+import { PruebaCalikdad } from '../screens/PruebaCalikdad';
 
 export type RootStackParams = {
   LoginScreen: undefined,
@@ -17,7 +19,8 @@ export type RootStackParams = {
   AuditoriaProcess: undefined,
   DetalleHistorialScreen: undefined,
   AuditoriaEnProceso: undefined,
-  
+  SeleccionAuditoria:undefined,
+  PruebaCalidad:undefined
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -38,6 +41,10 @@ export const StackNavigator = () => {
       <Stack.Screen name="AuditoriaProcess" component={AuditoriaProcess} />
       <Stack.Screen name="DetalleHistorialScreen" component={DetalleHistorialScreen} />
       <Stack.Screen name="AuditoriaEnProceso" component={AuditoriaEnProceso} />
+      <Stack.Screen name='SeleccionAuditoria' component={SeleccionAuditoria}/>
+      <Stack.Screen name='PruebaCalidad' component={PruebaCalikdad}/>
+
+
     </Stack.Navigator>
     //options={{ title: 'AuditoriaScreen' }}
   );

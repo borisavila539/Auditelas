@@ -7,6 +7,5 @@ export interface TextInputInterface {
     multiline: boolean,
     editable: boolean,
     onChangeText: (value: string) => void,
-    value: string,
-    maxLength: number,
+    value: string
 }

@@ -66,7 +66,7 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
     changeApVendRoll(item.apVendRoll)
     changeRolloId(item.rollId)
     changeNameAlias(item.nameAlias)
-    navigation.navigate('AuditoriaEnProceso')
+    navigation.navigate('SeleccionAuditoria')
 
   }
   const renderItem = (item: rollos) => {
