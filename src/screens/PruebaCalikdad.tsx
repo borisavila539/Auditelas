@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState,FC } from 'react'
 import { ActivityIndicator, FlatList, ScrollView, TouchableOpacity, View } from 'react-native'
 import { styles } from '../theme/app.Theme'
 import { Text } from 'react-native'
@@ -10,8 +10,12 @@ import { TextInput } from 'react-native-gesture-handler'
 import TextInputContainer from '../components/TextInputContainer'
 import { ObjectHeigth } from '../components/Constant'
 import MyAlert from '../components/myAlert'
+import { StackScreenProps } from '@react-navigation/stack'
 
-export const PruebaCalikdad = () => {
+
+interface Props extends StackScreenProps<any, any> { };
+
+export const PruebaCalikdad: FC<Props> = ({navigation}) => {
     const { telasState } = useContext(TelasContext);
     const [cargando, setCargando] = useState<boolean>(false)
     const [datos, setDatos] = useState<PruebaCalidadInterface[]>([])
@@ -240,7 +244,15 @@ export const PruebaCalikdad = () => {
                 }
 
             </View>
-            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => {
+                if(tipoMensaje){
+                    navigation.goBack()
+                    navigation.goBack()
+
+                }
+                setShowMensajeAlerta(false)
+                
+                }} />
 
         </View>
     )

@@ -102,7 +102,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'sans-serif',
     },
     textInputs: {
-        width: '100%',
+        width: '90%',
         backgroundColor: 'white',
         color: 'black',
         borderRadius: 10,

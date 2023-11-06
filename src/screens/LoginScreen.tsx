@@ -29,7 +29,7 @@ export const LoginScreen: FC<Props> = ({ navigation }) => {
       const request = await reqResApiFinanza.get<loginInterface[]>('PantsQuality/usuario/' + usuario + '/' + contrasena)
       if (request.data.length > 0) {
         if (request.data[0].activo == true) {
-          changeUserid (request.data[0].id)
+          changeUserid(request.data[0].id)
           changeUsername(request.data[0].usuario)
           setUsuario('')
           setContrasena('')
@@ -92,7 +92,7 @@ export const LoginScreen: FC<Props> = ({ navigation }) => {
             </Pressable>
           </View>
           <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
-           
+
             <TouchableOpacity
               style={{ width: '50%' }}
               activeOpacity={0.5}
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
     height: '30%',
     justifyContent: 'space-around',
     maxWidth: 600,
-    backgroundColor:navy,
+    backgroundColor: navy,
     alignItems: 'center',
     paddingVertical: 20,
-    borderRadius:20,
+    borderRadius: 20,
     paddingHorizontal: 20,
   },
   textInputAlign: {

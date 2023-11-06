@@ -18,12 +18,15 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
   const [page, setPage] = useState<number>(0)
   const [cargando, setCargando] = useState<boolean>(false)
   const { changeApVendRoll, changeRolloId, changeNameAlias, changeIdRollo } = useContext(TelasContext);
+  const [Importacion, setImportacion] = useState<string>('')
+  const [Tela, setTela] = useState<string>('')
+
 
   const reqRollos = async () => {
     if (!cargando) {
       setCargando(true)
       try {
-        const request = await reqResApiFinanza.get<rollos[]>('Auditelas/' + (NumeroRollo != '' ? NumeroRollo : 'R') + '/' + (IdPieza != '' ? IdPieza : '-') + '/0/15');
+        const request = await reqResApiFinanza.get<rollos[]>('Auditelas/' + (NumeroRollo != '' ? NumeroRollo : 'R') + '/' + (IdPieza != '' ? IdPieza : '-') + '/' + (Importacion != '' ? Importacion : '-') + '/' + (Tela != '' ? Tela : '-') + '/0/15');
         console.log(request.data)
         setHistorial(request.data)
         setPage(1)
@@ -38,7 +41,7 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
       setCargando(true)
       try {
         let request2: rollos[] = []
-        const request = await reqResApiFinanza.get<rollos[]>('Auditelas/' + (NumeroRollo != '' ? NumeroRollo : 'R') + '/' + (IdPieza != '' ? IdPieza : '-') + '/' + page + '/15');
+        const request = await reqResApiFinanza.get<rollos[]>('Auditelas/' + (NumeroRollo != '' ? NumeroRollo : 'R') + '/' + (IdPieza != '' ? IdPieza : '-') + '/' + (Importacion != '' ? Importacion : '-') + '/' + (Tela != '' ? Tela : '-') + '/' + page + '/15');
 
         console.log(request.data)
         request.data.map((x) => {
@@ -81,6 +84,7 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
             <Text style={styles.textRender}>Id de Pieza: {item.rollId}</Text>
             <Text style={styles.textRender}>Numero de rollo: {item.apVendRoll}</Text>
             <Text style={styles.textRender}>Tela: {item.nameAlias}</Text>
+            <Text style={styles.textRender}>Lote: {item.inventbatchid}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -95,17 +99,35 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
 
-      <View style={{ width: '80%', maxWidth: 500, marginTop: 10 }}>
+      <View style={{ width: '90%', maxWidth: 500, marginTop: 10 }}>
 
-        <Text style={styles.textRender}>Id de Pieza</Text>
-        <TextInput style={styles.textInputs} value={NumeroRollo}
-          onChangeText={(value) => setNumeroRollo(value)}
-        ></TextInput>
+        <View style={{ flexDirection: 'row', width: '100%'}}>
+          <View style={{ flexDirection: 'column', width: '50%' }}>
 
-        <Text style={styles.textRender}>Numero de rollo proveedor</Text>
-        <TextInput style={styles.textInputs} value={IdPieza}
-          onChangeText={(value) => setIdPieza(value)}
-        ></TextInput>
+            <Text style={styles.textRender}>Id de Pieza</Text>
+            <TextInput style={styles.textInputs} value={NumeroRollo}
+              onChangeText={(value) => setNumeroRollo(value)} />
+          </View>
+          <View style={{ flexDirection: 'column', width: '50%' }}>
+            <Text style={styles.textRender}>No. Rollo Proveedor</Text>
+            <TextInput style={styles.textInputs} value={IdPieza}
+              onChangeText={(value) => setIdPieza(value)} />
+          </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', width: '100%'}}>
+          <View style={{ flexDirection: 'column', width: '50%' }}>
+
+            <Text style={styles.textRender}>Importacion</Text>
+            <TextInput style={styles.textInputs} value={Importacion}
+              onChangeText={(value) => setImportacion(value)} />
+          </View>
+          <View style={{ flexDirection: 'column', width: '50%' }}>
+            <Text style={styles.textRender}>Tela</Text>
+            <TextInput style={styles.textInputs} value={Tela}
+              onChangeText={(value) => setTela(value)} />
+          </View>
+        </View>
 
         <TouchableOpacity
           style={{ width: '100%', marginTop: 10 }}
@@ -126,8 +148,8 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
           refreshControl={
             <RefreshControl refreshing={false} onRefresh={() => reqRollos()} colors={['#069A8E']} />
           }
-          
-        >      
+
+        >
         </FlatList>
       </View>
     </View>
