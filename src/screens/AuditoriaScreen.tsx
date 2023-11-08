@@ -5,9 +5,8 @@ import { styles } from '../theme/app.Theme';
 import { FlatList, RefreshControl, TextInput } from 'react-native-gesture-handler';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { rollos } from '../interfaces/reqResApi';
-import { TelasContext } from '../context/telasContext';
+import { TelasContext, TelasState } from '../context/telasContext';
 import { actualizarRollos } from '../interfaces/ActualizarRollos';
-
 
 interface Props extends StackScreenProps<any, any> { };
 
@@ -17,9 +16,10 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
   const [historial, setHistorial] = useState<rollos[]>([])
   const [page, setPage] = useState<number>(0)
   const [cargando, setCargando] = useState<boolean>(false)
-  const { changeApVendRoll, changeRolloId, changeNameAlias, changeIdRollo } = useContext(TelasContext);
+  const { changeApVendRoll, changeRolloId, changeNameAlias, changeIdRollo, telasState } = useContext(TelasContext);
   const [Importacion, setImportacion] = useState<string>('')
   const [Tela, setTela] = useState<string>('')
+
 
 
   const reqRollos = async () => {
@@ -69,7 +69,18 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
     changeApVendRoll(item.apVendRoll)
     changeRolloId(item.rollId)
     changeNameAlias(item.nameAlias)
-    navigation.navigate('SeleccionAuditoria')
+    switch (telasState.SeleccionAuditoria) {
+      case 'AuditoriaEnProceso':
+        navigation.navigate('AuditoriaEnProceso')
+        break;
+      case 'PruebaCalidad':
+        navigation.navigate('PruebaCalidad')
+        break;
+      default:
+        navigation.navigate('AuditoriaEnProceso')
+    }
+
+
 
   }
   const renderItem = (item: rollos) => {
@@ -101,7 +112,7 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
 
       <View style={{ width: '90%', maxWidth: 500, marginTop: 10 }}>
 
-        <View style={{ flexDirection: 'row', width: '100%'}}>
+        <View style={{ flexDirection: 'row', width: '100%' }}>
           <View style={{ flexDirection: 'column', width: '50%' }}>
 
             <Text style={styles.textRender}>Id de Pieza</Text>
@@ -115,7 +126,7 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', width: '100%'}}>
+        <View style={{ flexDirection: 'row', width: '100%' }}>
           <View style={{ flexDirection: 'column', width: '50%' }}>
 
             <Text style={styles.textRender}>Importacion</Text>

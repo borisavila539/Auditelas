@@ -1,24 +1,26 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { styles } from '../theme/app.Theme';
 import Buttons from '../components/Buttons';
+import { TelasContext } from '../context/telasContext';
 
 
 interface Props extends StackScreenProps<any, any> { };
 
 export const SeleccionAuditoria = ({ navigation }: Props) => {
+    const {changeSeleccionAuditoria} = useContext(TelasContext)
     return (
         <View style={styles.container}>
             <View style={stylesScreen.containerButtons}>
                 <Buttons
                     disable={false}
-                    onPress={()=>navigation.navigate('AuditoriaEnProceso')}
+                    onPress={()=>{changeSeleccionAuditoria('AuditoriaEnProceso'); navigation.navigate('AuditoriaScreen')}}
                     title='Auditoria'
                 />
                 <Buttons
                     disable={false}
-                    onPress={()=>navigation.navigate('PruebaCalidad')}
+                    onPress={()=>{changeSeleccionAuditoria('PruebaCalidad');navigation.navigate('AuditoriaScreen')}}
                     title='Pruebas Calidad'
                 />                
             </View>

@@ -28,7 +28,7 @@ export const BienvenidaScreen = ({ navigation }: Props) => {
           <TouchableOpacity
             style={{ width: '100%' }}
             activeOpacity={0.5}
-            onPress={() => navigation.navigate('AuditoriaScreen')}
+            onPress={() => navigation.navigate('SeleccionAuditoria')}
           >
             <View style={styles.button}>
               <Text style={[styles.text]}>Auditar rollo</Text>

@@ -9,6 +9,7 @@ export interface TelasState {
     username: string,
     nameAlias: string,
     IdRollo: string,
+    SeleccionAuditoria: string
 }
 
 //Colocar valor por default
@@ -19,6 +20,7 @@ export const TelasInitialState: TelasState = {
     username: '',
     nameAlias: '1',
     IdRollo: '1',
+    SeleccionAuditoria: ''
 }
 
 export interface TelasContextProps {
@@ -29,6 +31,7 @@ export interface TelasContextProps {
     changeApVendRoll: (apVendRoll: string) => void;
     changeNameAlias: (nameAlias: string) => void;
     changeIdRollo: (IdRollo: string) => void;
+    changeSeleccionAuditoria: (selected: string) => void
 }
 
 export const TelasContext = createContext({} as TelasContextProps)
@@ -54,6 +57,9 @@ export const TelasProvider = ({ children }: any) => {
     const changeIdRollo = (IdRollo: string) => {
         dispatch({ type: 'changeIdRollo', payload: IdRollo })
     }
+    const changeSeleccionAuditoria = (selected: string) => {
+        dispatch({ type: 'changeSeleccionAuditoria', payload: selected })
+    }
     return (
         <TelasContext.Provider value={{
             telasState,
@@ -63,6 +69,7 @@ export const TelasProvider = ({ children }: any) => {
             changeApVendRoll,
             changeNameAlias,
             changeIdRollo,
+            changeSeleccionAuditoria
         }}>
             {children}
         </TelasContext.Provider>

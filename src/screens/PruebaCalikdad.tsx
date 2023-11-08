@@ -247,8 +247,6 @@ export const PruebaCalikdad: FC<Props> = ({navigation}) => {
             <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => {
                 if(tipoMensaje){
                     navigation.goBack()
-                    navigation.goBack()
-
                 }
                 setShowMensajeAlerta(false)
                 
