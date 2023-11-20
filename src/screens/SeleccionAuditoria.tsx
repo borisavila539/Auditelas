@@ -22,7 +22,12 @@ export const SeleccionAuditoria = ({ navigation }: Props) => {
                     disable={false}
                     onPress={()=>{changeSeleccionAuditoria('PruebaCalidad');navigation.navigate('AuditoriaScreen')}}
                     title='Pruebas Calidad'
-                />                
+                />  
+                <Buttons
+                    disable={false}
+                    onPress={()=>{navigation.navigate('PruebaCalidadLote')}}
+                    title='Pruebas Calidad Por Lote'
+                />               
             </View>
 
         </View>

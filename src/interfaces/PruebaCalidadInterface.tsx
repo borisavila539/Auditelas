@@ -23,3 +23,15 @@ export interface PruebaCalidadInterface{
     torsion_BD: string,
     usuarioID:number 
 }
+
+export interface PruebaCalidadInterfaceLote{
+    id_Rollo: string,
+    trama1: number,
+    trama2: number,
+    trama3: number,
+    undimbre1: number,
+    undimbre2: number,
+    undimbre3: number,
+    torsion_AC: number,
+    torsion_BD: number,
+}

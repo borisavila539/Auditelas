@@ -8,6 +8,8 @@ type TelasAction =
     | { type: 'changeNameAlias', payload: string }
     | { type: 'changeIdRollo', payload: string }
     | { type: 'changeSeleccionAuditoria', payload: string }
+    | { type: 'changeCantidadLote', payload: number }
+    | { type: 'changeRollosLote', payload: string[] }
 
 export const TelasReducer = (state: TelasState, action: TelasAction): TelasState => {
 
@@ -26,6 +28,10 @@ export const TelasReducer = (state: TelasState, action: TelasAction): TelasState
             return { ...state, IdRollo: action.payload }
         case "changeSeleccionAuditoria":
             return { ...state, SeleccionAuditoria: action.payload }
+        case "changeCantidadLote":
+            return { ...state, CantidadLote: action.payload }
+        case "changeRollosLote":
+            return { ...state, RollosLote: action.payload }
         default:
             break;
     }

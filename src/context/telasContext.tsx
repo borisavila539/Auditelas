@@ -9,7 +9,10 @@ export interface TelasState {
     username: string,
     nameAlias: string,
     IdRollo: string,
-    SeleccionAuditoria: string
+    SeleccionAuditoria: string,
+    CantidadLote: number,
+    RollosLote: string[]
+
 }
 
 //Colocar valor por default
@@ -20,7 +23,9 @@ export const TelasInitialState: TelasState = {
     username: '',
     nameAlias: '1',
     IdRollo: '1',
-    SeleccionAuditoria: ''
+    SeleccionAuditoria: '',
+    CantidadLote: 0,
+    RollosLote: []
 }
 
 export interface TelasContextProps {
@@ -32,6 +37,8 @@ export interface TelasContextProps {
     changeNameAlias: (nameAlias: string) => void;
     changeIdRollo: (IdRollo: string) => void;
     changeSeleccionAuditoria: (selected: string) => void
+    changeCantidadLote: (cantidad: number) => void
+    changeRollosLote: (rollos: string[]) => void
 }
 
 export const TelasContext = createContext({} as TelasContextProps)
@@ -60,6 +67,14 @@ export const TelasProvider = ({ children }: any) => {
     const changeSeleccionAuditoria = (selected: string) => {
         dispatch({ type: 'changeSeleccionAuditoria', payload: selected })
     }
+    const changeCantidadLote = (cantidad: number) => {
+        dispatch({ type: 'changeCantidadLote', payload: cantidad })
+
+    }
+    const changeRollosLote = (rollos: string[]) => {
+        dispatch({ type: 'changeRollosLote', payload: rollos })
+
+    }
     return (
         <TelasContext.Provider value={{
             telasState,
@@ -69,7 +84,9 @@ export const TelasProvider = ({ children }: any) => {
             changeApVendRoll,
             changeNameAlias,
             changeIdRollo,
-            changeSeleccionAuditoria
+            changeSeleccionAuditoria,
+            changeCantidadLote,
+            changeRollosLote
         }}>
             {children}
         </TelasContext.Provider>

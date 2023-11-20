@@ -34,11 +34,11 @@ export const AuditoriaProcess = () => {
                     id_Rollo: telasState.IdRollo,
                     id_Estado: 1,
                     id_Defecto: x.id,
-                    total_Defectos: ((x.Nivel_1 ? x.Nivel_1 : 0) + ((x.Nivel_2 ? x.Nivel_2 : 0) * 2) + ((x.Nivel_3 ? x.Nivel_3 : 0) * 3) + ((x.Nivel_4 ? x.Nivel_4 : 0) * 4)),
-                    nivel_1: x.Nivel_1 ? x.Nivel_1 : 0,
-                    nivel_2: x.Nivel_2 ? x.Nivel_2 : 0,
-                    nivel_3: x.Nivel_3 ? x.Nivel_3 : 0,
-                    nivel_4: x.Nivel_4 ? x.Nivel_4 : 0,
+                    total_Defectos: ((x.nivel_1 ? x.nivel_1 : 0) + ((x.nivel_2 ? x.nivel_2 : 0) * 2) + ((x.nivel_3 ? x.nivel_3 : 0) * 3) + ((x.nivel_4 ? x.nivel_4 : 0) * 4)),
+                    nivel_1: x.nivel_1 ? x.nivel_1 : 0,
+                    nivel_2: x.nivel_2 ? x.nivel_2 : 0,
+                    nivel_3: x.nivel_3 ? x.nivel_3 : 0,
+                    nivel_4: x.nivel_4 ? x.nivel_4 : 0,
                 }
             ));
 
@@ -61,16 +61,16 @@ export const AuditoriaProcess = () => {
         const nuevosDatos: listaDefectosInterface[] = [...Datos];
         switch (nivel) {
             case 1:
-                item2.Nivel_1 = (item2.Nivel_1 - 1 >= 0) ? item2.Nivel_1 - 1 : 0
+                item2.nivel_1 = (item2.nivel_1 - 1 >= 0) ? item2.nivel_1 - 1 : 0
                 break
             case 2:
-                item2.Nivel_2 = (item2.Nivel_2 - 1 >= 0) ? item2.Nivel_2 - 1 : 0
+                item2.nivel_2 = (item2.nivel_2 - 1 >= 0) ? item2.nivel_2 - 1 : 0
                 break
             case 3:
-                item2.Nivel_3 = (item2.Nivel_3 - 1 >= 0) ? item2.Nivel_3 - 1 : 0
+                item2.nivel_3 = (item2.nivel_3 - 1 >= 0) ? item2.nivel_3 - 1 : 0
                 break
             case 4:
-                item2.Nivel_4 = (item2.Nivel_4 - 1 >= 0) ? item2.Nivel_4 - 1 : 0
+                item2.nivel_4 = (item2.nivel_4 - 1 >= 0) ? item2.nivel_4 - 1 : 0
                 break
             default:
                 item2 = item2
@@ -84,21 +84,21 @@ export const AuditoriaProcess = () => {
             const nuevosDatos: listaDefectosInterface[] = [...Datos];
 
             if (nivel = 1) {
-                item.Nivel_1 = item.Nivel_1 + 1;
+                item.nivel_1 = item.nivel_1 + 1;
 
             }
             switch (nivel) {
                 case 1:
-                    item2.Nivel_1 = item2.Nivel_1 + 1;
+                    item2.nivel_1 = item2.nivel_1 + 1;
                     break
                 case 2:
-                    item2.Nivel_2 = item2.Nivel_2 + 1;
+                    item2.nivel_2 = item2.nivel_2 + 1;
                     break
                 case 3:
-                    item2.Nivel_3 = item2.Nivel_3 + 1;
+                    item2.nivel_3 = item2.nivel_3 + 1;
                     break
                 case 4:
-                    item2.Nivel_4 = item2.Nivel_4 + 1;
+                    item2.nivel_4 = item2.nivel_4 + 1;
                     break
                 default:
                     item2 = item2
@@ -118,21 +118,21 @@ export const AuditoriaProcess = () => {
                         <TouchableOpacity style={[styles.botonSumaResta, { width: '15%' }]}
                             onPress={() => {
                                 const nuevosDatos = [...Datos]
-                                nuevosDatos[index].Nivel_1 = (item.Nivel_1 - 1 >= 0) ? item.Nivel_1 - 1 : 0
+                                nuevosDatos[index].nivel_1 = (item.nivel_1 - 1 >= 0) ? item.nivel_1 - 1 : 0
                                 setDatos(nuevosDatos)
                             }}
                         >
                             <Text style={{ color: 'white', fontSize: TextoPantallas }}>-</Text>
                         </TouchableOpacity>
-                        <TextInput value={item.Nivel_1 + ""} style={{ color: '#000', borderColor: '#000' }} />
+                        <TextInput value={item.nivel_1 + ""} style={{ color: '#000', borderColor: '#000' }} />
                         {
-                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.Nivel_1}</Text>
+                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.nivel_1}</Text>
                         }
 
                         <TouchableOpacity style={[styles.botonSumaResta, { width: '15%' }]}
                             onPress={() => {
                                 const nuevosDatos: listaDefectosInterface[] = [...Datos]
-                                nuevosDatos[index].Nivel_1 = item.Nivel_1 + 1
+                                nuevosDatos[index].nivel_1 = item.nivel_1 + 1
                                 console.log("inicio")
                                 setDatos(nuevosDatos)
                                 console.log("FIn")
@@ -149,9 +149,9 @@ export const AuditoriaProcess = () => {
                         >
                             <Text style={{ color: 'white', fontSize: TextoPantallas }}>-</Text>
                         </TouchableOpacity>
-                        <TextInput value={item.Nivel_2 + ""} style={{ color: '#000', borderColor: '#000' }} />
+                        <TextInput value={item.nivel_2 + ""} style={{ color: '#000', borderColor: '#000' }} />
                         {
-                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.Nivel_2}</Text>
+                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.nivel_2}</Text>
                         }
                         <TouchableOpacity style={[styles.botonSumaResta, { width: '15%' }]}
 
@@ -169,9 +169,9 @@ export const AuditoriaProcess = () => {
                         >
                             <Text style={{ color: 'white', fontSize: TextoPantallas }}>-</Text>
                         </TouchableOpacity>
-                        <TextInput value={item.Nivel_3 + ""} style={{ color: '#000', borderColor: '#000' }} />
+                        <TextInput value={item.nivel_3 + ""} style={{ color: '#000', borderColor: '#000' }} />
                         {
-                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.Nivel_3}</Text>
+                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.nivel_3}</Text>
                         }
                         <TouchableOpacity style={[styles.botonSumaResta, { width: '15%' }]}
 
@@ -189,9 +189,9 @@ export const AuditoriaProcess = () => {
                         >
                             <Text style={{ color: 'white', fontSize: TextoPantallas }}>-</Text>
                         </TouchableOpacity>
-                        <TextInput value={item.Nivel_4 + ""} style={{ color: '#000', borderColor: '#000' }} />
+                        <TextInput value={item.nivel_4 + ""} style={{ color: '#000', borderColor: '#000' }} />
                         {
-                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.Nivel_4}</Text>
+                            //<Text style={[styles.textRender, { width: '15%', textAlign: 'center' }]}>{item.nivel_4}</Text>
                         }
                         <TouchableOpacity style={[styles.botonSumaResta, { width: '15%' }]}
 
@@ -201,7 +201,7 @@ export const AuditoriaProcess = () => {
                         </TouchableOpacity>
                     </View>
                     {
-                        <Text style={styles.textTotal} >Total: {((item.Nivel_1 ? item.Nivel_1 : 0) + ((item.Nivel_2 ? item.Nivel_2 : 0) * 2) + ((item.Nivel_3 ? item.Nivel_3 : 0) * 3) + ((item.Nivel_4 ? item.Nivel_4 : 0) * 4))}</Text>
+                        <Text style={styles.textTotal} >Total: {((item.nivel_1 ? item.nivel_1 : 0) + ((item.nivel_2 ? item.nivel_2 : 0) * 2) + ((item.nivel_3 ? item.nivel_3 : 0) * 3) + ((item.nivel_4 ? item.nivel_4 : 0) * 4))}</Text>
                     }
                 </View>
             </View>

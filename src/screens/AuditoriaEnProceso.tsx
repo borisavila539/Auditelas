@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useId } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Text, View, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
 import { styles } from '../theme/app.Theme';
 import { listaDefectosInterface } from '../interfaces/listaDefectos'
@@ -10,7 +10,7 @@ import MyAlert from '../components/myAlert';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Niveles } from '../components/Niveles';
 import { yardasRealesInterface } from '../interfaces/yardas';
-import { rollos } from '../interfaces/reqResApi';
+//import { yardasRealesInterface } from '../interfaces/yardas';
 
 interface Props extends StackScreenProps<any, any> { };
 
@@ -33,11 +33,23 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     const [PM, setPM] = useState<string>('');
 
 
+    const ActualizarAncho = async () => {
+        let a1 = parseFloat(ancho1)
+        let a2 = parseFloat(ancho2)
+        let a3 = parseFloat(ancho3)
+        let minimo: number = Math.min(a1, a2, a3)
+        try {
+            const request = await reqResApiFinanza.get<InsertAuditelas[]>('Auditelas/setAnchoRollo/' + telasState.rollId + '/' + minimo);
+        } catch (err) {
+
+        }
+
+    }
     const onPressEnviar = async () => {
 
         if (!enviando) {
             setEnviando(true)
-
+            ActualizarAncho()
             try {
                 let enviar: InsertAuditelas[] = Datos.map(x => (
                     {
@@ -207,27 +219,27 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         Datos.forEach(x => {
             total += x.total_Defectos
         })
-        let denominador : number = (
+        let denominador: number = (
             (
                 (
-                    (parseFloat(ancho1 == ""? '0' : ancho1)+(parseFloat(ancho2== ""? '0' : ancho2))+(parseFloat(ancho3== ""? '0' : ancho3)))/3
+                    (parseFloat(ancho1 == "" ? '0' : ancho1) + (parseFloat(ancho2 == "" ? '0' : ancho2)) + (parseFloat(ancho3 == "" ? '0' : ancho3))) / 3
                 )
-                *0.0254
-            )* parseFloat(YardasProveedor== ""? '0' : YardasProveedor)
+                * 0.0254
+            ) * parseFloat(YardasProveedor == "" ? '0' : YardasProveedor)
         );
-        calculo = (total * 100)/(denominador>0?denominador: 1);
-        setPM(parseFloat(calculo.toFixed(2)) > 0 ?calculo.toFixed(2):'')
+        calculo = (total * 100) / (denominador > 0 ? denominador : 1);
+        setPM(parseFloat(calculo.toFixed(2)) > 0 ? calculo.toFixed(2) : '')
 
     }
-    
+
 
     useEffect(() => {
         GetData()
     }, [])
 
-   
 
-   
+
+
 
     return (
 

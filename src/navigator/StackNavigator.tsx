@@ -10,6 +10,8 @@ import { DetalleHistorialScreen } from '../screens/DetalleHistorialScreen';
 import { AuditoriaEnProceso } from '../screens/AuditoriaEnProceso';
 import { SeleccionAuditoria } from '../screens/SeleccionAuditoria';
 import { PruebaCalikdad } from '../screens/PruebaCalikdad';
+import { PruebaCalidadLote } from '../screens/PruebaCalidadLote';
+import { PruebaCalidadProcess } from '../screens/PruebaCalidadLoteProcess';
 
 export type RootStackParams = {
   LoginScreen: undefined,
@@ -20,7 +22,10 @@ export type RootStackParams = {
   DetalleHistorialScreen: undefined,
   AuditoriaEnProceso: undefined,
   SeleccionAuditoria:undefined,
-  PruebaCalidad:undefined
+  PruebaCalidad:undefined,
+  PruebaCalidadLote:undefined,
+  PruebaCalidadLoteProcess:undefined
+
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -43,6 +48,10 @@ export const StackNavigator = () => {
       <Stack.Screen name="AuditoriaEnProceso" component={AuditoriaEnProceso} />
       <Stack.Screen name='SeleccionAuditoria' component={SeleccionAuditoria}/>
       <Stack.Screen name='PruebaCalidad' component={PruebaCalikdad}/>
+      <Stack.Screen name='PruebaCalidadLote' component={PruebaCalidadLote}/>
+      <Stack.Screen name='PruebaCalidadLoteProcess' component={PruebaCalidadProcess}/>
+
+
 
 
     </Stack.Navigator>
