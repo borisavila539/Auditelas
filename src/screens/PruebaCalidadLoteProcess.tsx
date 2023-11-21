@@ -33,9 +33,9 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
     const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
     const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
     const [cantidad, setCantidad] = useState<number>(0)
-    const [pruebas,setPruebas] = useState<PruebaCalidadInterfaceLote[]>([])
+    const [pruebas, setPruebas] = useState<PruebaCalidadInterfaceLote[]>([])
 
-    const GuardarAuditoria=()=>{
+    const GuardarAuditoria = () => {
         let prueba: PruebaCalidadInterfaceLote = {
             id_Rollo: '',
             trama1: parseFloat(datos[0].trama1 == '' ? '0' : datos[0].trama1),
@@ -52,26 +52,26 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
 
     }
     const onPressEnviar = async () => {
-        
+
 
         if (!enviando) {
             setEnviando(true)
             if (telasState.CantidadLote == cantidad) {
-                let cont:number = telasState.RollosLote.length;
+
                 let prueba: PruebaCalidadInterfaceLote = {
                     id_Rollo: '',
-                    trama1:0 ,
+                    trama1: 0,
                     trama2: 0,
                     trama3: 0,
                     undimbre1: 0,
-                    undimbre2:0,
+                    undimbre2: 0,
                     undimbre3: 0,
                     torsion_AC: 0,
                     torsion_BD: 0
                 }
-                pruebas.forEach(x=>{
+                pruebas.forEach(x => {
                     prueba.trama1 += x.trama1
-                    prueba.trama2 += x.trama2 
+                    prueba.trama2 += x.trama2
                     prueba.trama3 += x.trama3
                     prueba.undimbre1 += x.undimbre1
                     prueba.undimbre2 += x.undimbre2
@@ -82,37 +82,40 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                 let dividir: number = pruebas.length
                 prueba = {
                     id_Rollo: '',
-                    trama1:prueba.trama1/dividir ,
-                    trama2: prueba.trama2/dividir,
-                    trama3: prueba.trama3/dividir,
-                    undimbre1: prueba.undimbre1/dividir,
-                    undimbre2:prueba.undimbre2/dividir,
-                    undimbre3: prueba.undimbre3/dividir,
-                    torsion_AC: prueba.torsion_AC/dividir,
-                    torsion_BD: prueba.torsion_BD/dividir
+                    trama1: prueba.trama1 / dividir,
+                    trama2: prueba.trama2 / dividir,
+                    trama3: prueba.trama3 / dividir,
+                    undimbre1: prueba.undimbre1 / dividir,
+                    undimbre2: prueba.undimbre2 / dividir,
+                    undimbre3: prueba.undimbre3 / dividir,
+                    torsion_AC: prueba.torsion_AC / dividir,
+                    torsion_BD: prueba.torsion_BD / dividir
                 }
-                telasState.RollosLote.forEach(async (x) => {
-                    try {
-                        prueba.id_Rollo = x
 
-                        console.log(prueba)
-                        
-                        /*const request = await reqResApiFinanza.post<PruebaCalidadInterfacenumber[]>('Auditelas/InsertPruebaCalidad', enviar);
-                        if (request.data.length > 0) {
-                            setMensajeAlerta('Auditoría Enviada')
-                            setTipoMensaje(true);
-                            setShowMensajeAlerta(true);
-                        }*/
-                        cont --;
-                    } catch (err) {
-
-                    }
+                let PruebaRollos: PruebaCalidadInterfaceLote[] = [];
+                telasState.RollosLote.forEach(x => {
+                    PruebaRollos.push({ ...prueba, id_Rollo: x })
                 })
-                if (cont == 0){
-                    navigation.goBack();
-                }else{
 
+                try {
+                    const request = await reqResApiFinanza.post<PruebaCalidadInterfaceLote[]>('Auditelas/InsertPruebaCalidadLote', PruebaRollos);
+                    if (request.data.length > 0) {
+                        setMensajeAlerta('Auditoría Enviada')
+                        setTipoMensaje(true);
+                        setShowMensajeAlerta(true);
+                    } else {
+                        setMensajeAlerta('Error al enviar auditoria')
+                        setTipoMensaje(false);
+                        setShowMensajeAlerta(true);
+                    }
+
+                } catch (err) {
+                    setMensajeAlerta('Error al enviar auditoria')
+                    setTipoMensaje(false);
+                    setShowMensajeAlerta(true);
                 }
+
+
             }
 
             setEnviando(false)
@@ -129,7 +132,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].trama1 = value
@@ -144,7 +147,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].trama2 = value
@@ -159,7 +162,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].trama3 = value
@@ -174,7 +177,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].undimbre1 = value
@@ -189,7 +192,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].undimbre2 = value
@@ -204,7 +207,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].undimbre3 = value
@@ -219,7 +222,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].torsion_AC = value
@@ -234,7 +237,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                     placeholder='0.00'
                     teclado={'decimal-pad'}
                     multiline={false}
-                    editable={true}
+                    editable={cantidad != telasState.CantidadLote}
                     onChangeText={(value) => {
                         const nuevosDatos = [...datos]
                         nuevosDatos[index].torsion_BD = value
@@ -269,7 +272,7 @@ export const PruebaCalidadProcess: FC<Props> = ({ navigation }) => {
                 <TouchableOpacity
                     style={{ width: '70%' }}
                     activeOpacity={0.5}
-                    onPress={() => cantidad == telasState.CantidadLote ?onPressEnviar():GuardarAuditoria()}
+                    onPress={() => cantidad == telasState.CantidadLote ? onPressEnviar() : GuardarAuditoria()}
                     disabled={datos.length > 0 ? enviando : false}
                 >
                     <View style={[styles.button, { backgroundColor: orange, height: 41, width: '100%', alignSelf: 'center' }]}>
