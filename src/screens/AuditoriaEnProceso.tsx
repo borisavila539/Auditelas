@@ -83,10 +83,10 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
                         
                         if (request2.data = 'Creado' || request2.data == 'Actualizado') {
+                            CalculoPM()
                             setMensajeAlerta('Auditoría Enviada')
                             setTipoMensaje(true);
                             setShowMensajeAlerta(true);
-                            CalculoPM()
                         } else {
                             setMensajeAlerta(request2.data)
                             setTipoMensaje(false);
@@ -217,7 +217,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         let calculo: number = 0;
         let total: number = 0;
         Datos.forEach(x => {
-            total += x.total_Defectos
+            total += ((x.nivel_1 ? x.nivel_1 : 0) + ((x.nivel_2 ? x.nivel_2 : 0) * 2) + ((x.nivel_3 ? x.nivel_3 : 0) * 3) + ((x.nivel_4 ? x.nivel_4 : 0) * 4))
         })
         let denominador: number = (
             (
