@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Text, View, FlatList, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
 import { styles } from '../theme/app.Theme';
 import { listaDefectosInterface } from '../interfaces/listaDefectos'
-import { black, grey, orange } from '../components/colores';
+import { black, grey, menta, orange } from '../components/colores';
 import { TelasContext } from '../context/telasContext';
 import { InsertAuditelas } from '../interfaces/insertAuditelas';
 import { reqResApiFinanza } from '../api/reqResApi';
@@ -10,7 +10,10 @@ import MyAlert from '../components/myAlert';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Niveles } from '../components/Niveles';
 import { yardasRealesInterface } from '../interfaces/yardas';
+import { DatosRolloInterface } from '../interfaces/DatosRollosInterface';
 //import { yardasRealesInterface } from '../interfaces/yardas';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 interface Props extends StackScreenProps<any, any> { };
 
@@ -78,10 +81,11 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
 
                 const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
                 if (request.data.length > 0) {
+                    await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
 
                     try {
                         const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
-                        
+
                         if (request2.data = 'Creado' || request2.data == 'Actualizado') {
                             CalculoPM()
                             setMensajeAlerta('Auditoría Enviada')
@@ -98,7 +102,6 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         setTipoMensaje(false);
                         setShowMensajeAlerta(true);
                     }
-                    const request3 = await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
                 }
 
             }
@@ -212,6 +215,14 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
             </View>
         )
     }
+    const ImprimirEtiqueta = async () => {
+        try {
+            await reqResApiFinanza.get<string>(`Auditelas/ImprimirEtiqueta/${telasState.rollId}`)
+        } catch (err) {
+            console.log(err + telasState.IdRollo)
+        }
+    }
+
 
     const CalculoPM = () => {
         let calculo: number = 0;
@@ -233,8 +244,23 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     }
 
 
+    const getDatosRollo = async () => {
+        try {
+            await reqResApiFinanza.get<DatosRolloInterface>(`Auditelas/ObtenerDatosRollo/${telasState.rollId}`).then(resp => {
+                setAncho1(resp.data.ancho_1.toString())
+                setAncho2(resp.data.ancho_2.toString())
+                setAncho3(resp.data.ancho_3.toString())
+                setYardasProveedor(resp.data.yardas_Proveedor.toString())
+                setYardasReales(resp.data.yardas_Reales.toString())
+
+            })
+        } catch (err) {
+            console.log(err + telasState.rollId)
+        }
+    }
     useEffect(() => {
         GetData()
+        getDatosRollo()
     }, [])
 
 
@@ -291,7 +317,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     </View>
                     <View style={styles.viewsAuditoria}>
                         <TextInput editable={false} placeholder='Diferencia'
-                            value={(parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString()}
+                            value={(parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toFixed(2).toString()}
                             textAlign='center' keyboardType='decimal-pad'
                             placeholderTextColor={grey} style={{ color: black, backgroundColor: 'white' }}></TextInput>
                     </View>
@@ -321,17 +347,25 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 </View>
             </View>
 
-            <TouchableOpacity
-                style={{ width: '70%' }}
-                activeOpacity={0.5}
-                onPress={() => onPressEnviar()}
-                disabled={Datos.length > 0 ? enviando : false}
+            <View style={{ width: '100%', flexDirection: 'row',justifyContent: 'space-evenly' }}>
+                <TouchableOpacity
+                    style={{ width: '70%' }}
+                    activeOpacity={0.5}
+                    onPress={() => onPressEnviar()}
+                    disabled={Datos.length > 0 ? enviando : false}
 
-            >
-                <View style={[styles.button, { backgroundColor: orange, height: 41, width: '100%', alignSelf: 'center' }]}>
-                    <Text style={styles.text}>{enviando ? "Enviando..." : "Enviar Auditoria"}</Text>
-                </View>
-            </TouchableOpacity>
+                >
+                    <View style={[styles.button, { backgroundColor: orange, height: 41, width: '100%', alignSelf: 'center' }]}>
+                        <Text style={styles.text}>{enviando ? "Enviando..." : "Enviar Auditoria"}</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={ImprimirEtiqueta} style={{
+                    marginTop: 3, borderRadius:10, width: 50, padding: 5, backgroundColor: menta, alignItems: 'center',justifyContent:'center'
+
+                }}>
+                    <Icon name='print' size={20} color={black}></Icon>
+                </TouchableOpacity>
+            </View>
 
             <View style={{ flex: 1, width: '100%', maxWidth: 600, borderWidth: 1, marginTop: 10, alignItems: 'center' }}>
                 {
