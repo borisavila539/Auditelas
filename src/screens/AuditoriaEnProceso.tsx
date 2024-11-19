@@ -86,7 +86,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     try {
                         const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
 
-                        if (request2.data = 'Creado' || request2.data == 'Actualizado') {
+                        if (request2.data == 'Creado' || request2.data == 'Actualizado') {
                             CalculoPM()
                             setMensajeAlerta('Auditoría Enviada')
                             setTipoMensaje(true);
@@ -217,7 +217,9 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     }
     const ImprimirEtiqueta = async () => {
         try {
-            await reqResApiFinanza.get<string>(`Auditelas/ImprimirEtiqueta/${telasState.rollId}`)
+            await reqResApiFinanza.get<string>(`Auditelas/ImprimirEtiqueta/${telasState.rollId}`).then(resp =>{
+                navigation.goBack();
+            })
         } catch (err) {
             console.log(err + telasState.IdRollo)
         }

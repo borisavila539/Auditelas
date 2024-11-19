@@ -61,6 +61,12 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
       const datos: actualizarRollos[] = [{ id: '0', id_Pieza: item.rollId, numero_Rollo_Proveedor: item.apVendRoll, observaciones: '' }]
       const request = await reqResApiFinanza.post<actualizarRollos[]>('Auditelas/ActualizarRollos', datos);
       changeIdRollo(request.data[0].id)
+      setIdPieza('')
+      setNumeroRollo('')
+      setImportacion('')
+      setTela('')
+      setHistorial([])
+      setPage(0)
     } catch (error) {
       console.log(error)
     }
