@@ -63,8 +63,8 @@ export const AuditoriaScreen = ({ navigation }: Props) => {
       changeIdRollo(request.data[0].id)
       setIdPieza('')
       setNumeroRollo('')
-      setImportacion('')
-      setTela('')
+      //setImportacion('')
+      //setTela('')
       setHistorial([])
       setPage(0)
     } catch (error) {
