@@ -53,61 +53,67 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         if (!enviando) {
             setEnviando(true)
             ActualizarAncho()
-            try {
-                let enviar: InsertAuditelas[] = Datos.map(x => (
-                    {
-                        id_Auditor_Creacion: telasState.usuarioId,
-                        id_Rollo: telasState.IdRollo,
-                        id_Estado: 1,
-                        id_Defecto: x.id,
-                        total_Defectos: ((x.nivel_1 ? x.nivel_1 : 0) + ((x.nivel_2 ? x.nivel_2 : 0) * 2) + ((x.nivel_3 ? x.nivel_3 : 0) * 3) + ((x.nivel_4 ? x.nivel_4 : 0) * 4)),
-                        nivel_1: x.nivel_1 ? x.nivel_1 : 0,
-                        nivel_2: x.nivel_2 ? x.nivel_2 : 0,
-                        nivel_3: x.nivel_3 ? x.nivel_3 : 0,
-                        nivel_4: x.nivel_4 ? x.nivel_4 : 0,
-                    }
-                ));
+            if (parseFloat(YardasReales ? YardasReales : '0') > 0) {
+                try {
+                    let enviar: InsertAuditelas[] = Datos.map(x => (
+                        {
+                            id_Auditor_Creacion: telasState.usuarioId,
+                            id_Rollo: telasState.IdRollo,
+                            id_Estado: 1,
+                            id_Defecto: x.id,
+                            total_Defectos: ((x.nivel_1 ? x.nivel_1 : 0) + ((x.nivel_2 ? x.nivel_2 : 0) * 2) + ((x.nivel_3 ? x.nivel_3 : 0) * 3) + ((x.nivel_4 ? x.nivel_4 : 0) * 4)),
+                            nivel_1: x.nivel_1 ? x.nivel_1 : 0,
+                            nivel_2: x.nivel_2 ? x.nivel_2 : 0,
+                            nivel_3: x.nivel_3 ? x.nivel_3 : 0,
+                            nivel_4: x.nivel_4 ? x.nivel_4 : 0,
+                        }
+                    ));
 
-                let enviar2: yardasRealesInterface[] = [{
-                    id_Rollo: parseInt(telasState.IdRollo),
-                    ancho_1: parseFloat(ancho1),
-                    ancho_2: parseFloat(ancho2),
-                    ancho_3: parseFloat(ancho3),
-                    yardas_Proveedor: parseFloat(YardasProveedor),
-                    yardas_Reales: parseFloat(YardasReales),
-                    diferencia_Yardas: parseFloat((parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString(),),
-                    observaciones: observaciones,
-                }]
+                    let enviar2: yardasRealesInterface[] = [{
+                        id_Rollo: parseInt(telasState.IdRollo),
+                        ancho_1: parseFloat(ancho1),
+                        ancho_2: parseFloat(ancho2),
+                        ancho_3: parseFloat(ancho3),
+                        yardas_Proveedor: parseFloat(YardasProveedor),
+                        yardas_Reales: parseFloat(YardasReales),
+                        diferencia_Yardas: parseFloat((parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString(),),
+                        observaciones: observaciones,
+                    }]
 
-                const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
-                if (request.data.length > 0) {
-                    await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
+                    const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
+                    if (request.data.length > 0) {
+                        await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
 
-                    try {
-                        const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
+                        try {
+                            const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
 
-                        if (request2.data == 'Creado' || request2.data == 'Actualizado') {
-                            CalculoPM()
-                            setMensajeAlerta('Auditoría Enviada')
-                            setTipoMensaje(true);
-                            setShowMensajeAlerta(true);
-                        } else {
-                            setMensajeAlerta(request2.data)
+                            if (request2.data == 'Creado' || request2.data == 'Actualizado') {
+                                CalculoPM()
+                                setMensajeAlerta('Auditoría Enviada')
+                                setTipoMensaje(true);
+                                setShowMensajeAlerta(true);
+                            } else {
+                                setMensajeAlerta(request2.data)
+                                setTipoMensaje(false);
+                                setShowMensajeAlerta(true);
+                            }
+                        }
+                        catch (error) {
+                            setMensajeAlerta('Error en el envío en AX')
                             setTipoMensaje(false);
                             setShowMensajeAlerta(true);
                         }
                     }
-                    catch (error) {
-                        setMensajeAlerta('Error en el envío en AX')
-                        setTipoMensaje(false);
-                        setShowMensajeAlerta(true);
-                    }
-                }
 
-            }
-            catch (error) {
-                console.log(error)
-                setMensajeAlerta('Error en el envío')
+                }
+                catch (error) {
+                    console.log(error)
+                    setMensajeAlerta('Error en el envío')
+                    setTipoMensaje(false);
+                    setShowMensajeAlerta(true);
+                }
+            } else {
+                setMensajeAlerta('Yardas Reales en Cero')
                 setTipoMensaje(false);
                 setShowMensajeAlerta(true);
             }
@@ -217,7 +223,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
     }
     const ImprimirEtiqueta = async () => {
         try {
-            await reqResApiFinanza.get<string>(`Auditelas/ImprimirEtiqueta/${telasState.rollId}`).then(resp =>{
+            await reqResApiFinanza.get<string>(`Auditelas/ImprimirEtiqueta/${telasState.rollId}`).then(resp => {
                 navigation.goBack();
             })
         } catch (err) {
@@ -349,7 +355,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 </View>
             </View>
 
-            <View style={{ width: '100%', flexDirection: 'row',justifyContent: 'space-evenly' }}>
+            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                 <TouchableOpacity
                     style={{ width: '70%' }}
                     activeOpacity={0.5}
@@ -362,7 +368,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={ImprimirEtiqueta} style={{
-                    marginTop: 3, borderRadius:10, width: 50, padding: 5, backgroundColor: menta, alignItems: 'center',justifyContent:'center'
+                    marginTop: 3, borderRadius: 10, width: 50, padding: 5, backgroundColor: menta, alignItems: 'center', justifyContent: 'center'
 
                 }}>
                     <Icon name='print' size={20} color={black}></Icon>
