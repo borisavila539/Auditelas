@@ -13,6 +13,7 @@ import { yardasRealesInterface } from '../interfaces/yardas';
 import { DatosRolloInterface } from '../interfaces/DatosRollosInterface';
 //import { yardasRealesInterface } from '../interfaces/yardas';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ConfiguracionPorcentajeAceptacion } from '../interfaces/ConfiguracionPorcentajeAceptacion';
 
 
 interface Props extends StackScreenProps<any, any> { };
@@ -69,6 +70,14 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         }
                     ));
 
+                    const porcentajeAceptacion = await reqResApiFinanza.get<ConfiguracionPorcentajeAceptacion>('Auditelas/GetAditelaConfiguracionPorcentajeAceptacion');
+                    const promedioAceptable = parseFloat(YardasProveedor) * parseFloat(porcentajeAceptacion.data.valor);
+                    const limiteSuperio = parseFloat(YardasProveedor) + promedioAceptable;
+                    const limiteInferior = parseFloat(YardasProveedor) - promedioAceptable;
+                    const limiteEnYardajeProveedor = 180;
+                    const esIncorrectoYardajeProveedor = parseFloat(YardasProveedor) > limiteEnYardajeProveedor;
+                    const noAceptable = (parseFloat(YardasReales) < limiteInferior || parseFloat(YardasReales) > limiteSuperio) || esIncorrectoYardajeProveedor;
+
                     let enviar2: yardasRealesInterface[] = [{
                         id_Rollo: parseInt(telasState.IdRollo),
                         ancho_1: parseFloat(ancho1),
@@ -79,32 +88,37 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                         diferencia_Yardas: parseFloat((parseFloat(YardasReales ? YardasReales : '0') - parseFloat(YardasProveedor ? YardasProveedor : '0')).toString(),),
                         observaciones: observaciones,
                     }]
+                    if (noAceptable) {
+                        setMensajeAlerta('El yardeje real o del proveedor está fuera del límite permitido. ')
+                        setTipoMensaje(false);
+                        setShowMensajeAlerta(true);
+                    } else {
+                        const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
+                        if (request.data.length > 0) {
+                            await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
 
-                    const request = await reqResApiFinanza.post<InsertAuditelas[]>('Auditelas/DatosRollosInsert', enviar);
-                    if (request.data.length > 0) {
-                        await reqResApiFinanza.post<yardasRealesInterface[]>('Auditelas/InsertarAnchoYardas', enviar2);
+                            try {
+                                const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
 
-                        try {
-                            const request2 = await reqResApiFinanza.get<string>('Auditelas/EnvioAX/' + telasState.IdRollo);
-
-                            if (request2.data == 'Creado' || request2.data == 'Actualizado') {
-                                CalculoPM()
-                                setMensajeAlerta('Auditoría Enviada')
-                                setTipoMensaje(true);
-                                setShowMensajeAlerta(true);
-                            } else {
-                                setMensajeAlerta(request2.data)
+                                if (request2.data == 'Creado' || request2.data == 'Actualizado') {
+                                    CalculoPM()
+                                    setMensajeAlerta('Auditoría Enviada')
+                                    setTipoMensaje(true);
+                                    setShowMensajeAlerta(true);
+                                } else {
+                                    setMensajeAlerta(request2.data)
+                                    setTipoMensaje(false);
+                                    setShowMensajeAlerta(true);
+                                }
+                            }
+                            catch (error) {
+                                setMensajeAlerta('Error en el envío en AX')
                                 setTipoMensaje(false);
                                 setShowMensajeAlerta(true);
                             }
                         }
-                        catch (error) {
-                            setMensajeAlerta('Error en el envío en AX')
-                            setTipoMensaje(false);
-                            setShowMensajeAlerta(true);
-                        }
-                    }
 
+                    }
                 }
                 catch (error) {
                     console.log(error)
