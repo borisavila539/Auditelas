@@ -94,20 +94,20 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
         if (!pendienteEnvio || enviando) return;
 
         if (!rolloValidacion.trim() || !metrajeValidacion.trim()) {
-            setMensajeAlerta('Debe ingresar el número de rollo y el metraje para validar.');
+            setMensajeAlerta('Debe ingresar el número de rollo y el metraje real para validar.');
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
             return;
         }
 
         const rolloCorrecto =
-            normalizarTexto(rolloValidacion) === normalizarTexto(telasState.rollId);
+            normalizarTexto(rolloValidacion) === normalizarTexto(telasState.apVendRoll);
 
         const metrajeCorrecto =
             compararDecimales(metrajeValidacion, YardasReales);
 
         if (!rolloCorrecto || !metrajeCorrecto) {
-            setMensajeAlerta('El número de rollo o el metraje ingresado no coinciden.');
+            setMensajeAlerta('El número de rollo o el metraje real ingresado no coinciden.');
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
             return;
@@ -545,7 +545,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
                 <View
                     style={{
                         flex: 1,
-                        backgroundColor: 'rgba(0,0,0,0.45)',
+                        backgroundColor: 'rgb(0, 0, 0)',
                         justifyContent: 'center',
                         alignItems: 'center',
                         padding: 20
@@ -566,7 +566,7 @@ export const AuditoriaEnProceso = ({ navigation }: Props) => {
 
                         <Text style={{ color: black, marginBottom: 15 }}>
                             El metraje real está fuera del porcentaje de aprobación permitido.
-                            Para continuar, valide el número de rollo y el metraje del rollo.
+                            Para continuar, valide el número de rollo y el metraje real del rollo.
                         </Text>
 
                         <TextInput
